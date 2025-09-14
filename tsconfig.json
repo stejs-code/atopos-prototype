@@ -16,7 +16,24 @@
     "moduleResolution": "Bundler",
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./src/*"],
+      "#controllers/*": ["./app/controllers/*"],
+      "#exceptions/*": ["./app/exceptions/*"],
+      "#models/*": ["./app/models/*"],
+      "#mails/*": ["./app/mails/*"],
+      "#services/*": ["./app/services/*"],
+      "#listeners/*": ["./app/listeners/*"],
+      "#events/*": ["./app/events/*"],
+      "#middleware/*": ["./app/middleware/*"],
+      "#validators/*": ["./app/validators/*"],
+      "#providers/*": ["./providers/*"],
+      "#policies/*": ["./app/policies/*"],
+      "#abilities/*": ["./app/abilities/*"],
+      "#database/*": ["./database/*"],
+      "#start/*": ["./start/*"],
+      "#hooks/*": ["./hooks/*"],
+      "#tests/*": ["./tests/*"],
+      "#config/*": ["./config/*"]
     }
   },
 //  "include": ["./*.d.ts", "./*.config.ts", "config", ]

@@ -2,19 +2,21 @@ import { defineConfig } from 'vite'
 import { qwikVite } from '@qwik.dev/core/optimizer'
 import * as fs from 'node:fs'
 import tsconfigPaths from 'vite-tsconfig-paths'
+import { vitePlugin } from './bin/vite-plugin'
 
 export default defineConfig({
   base: '/dist/',
   server: {
     hmr: false,
   },
-  publicDir:false,
+  publicDir: false,
   build: {
+    minify: false,
     manifest: true,
     copyPublicDir: false,
-    outDir: 'public',   // put build output here
-    emptyOutDir: false,      // don’t wipe the whole folder
-    assetsDir: 'build',     // images/fonts go here: public/dist/assets/
+    outDir: 'public', // put build output here
+    emptyOutDir: false, // don’t wipe the whole folder
+    assetsDir: 'build', // images/fonts go here: public/dist/assets/
     rollupOptions: {
       output: {
         entryFileNames: 'build/[name].js',
@@ -26,18 +28,19 @@ export default defineConfig({
           }
           // everything else (JS/CSS chunks) in build/
           return 'build/[name]-[hash][extname]'
-        }
-      }
-    }
+        },
+      },
+    },
   },
 
   plugins: [
     tsconfigPaths({ root: '.' }),
+    vitePlugin(),
     qwikVite({
       devSsrServer: false,
       ssr: {
-        manifestInput: loadManifest()
-      }
+        manifestInput: loadManifest(),
+      },
     }),
     // adonisjs({
     //   /**
@@ -54,13 +57,10 @@ export default defineConfig({
   ],
 })
 
-function loadManifest(){
+function loadManifest() {
   try {
-    const str = fs.readFileSync('public/dist/q-manifest.json').toString("utf-8")
-
-    return JSON.parse(str)
+    return JSON.parse(fs.readFileSync('public/dist/q-manifest.json').toString('utf-8'))
   } catch (e) {
-    console.log("EMTRU SSR AMNIFEST")
     return {}
   }
 }

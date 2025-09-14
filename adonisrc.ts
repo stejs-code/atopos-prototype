@@ -92,10 +92,14 @@ export default defineConfig({
     },
   ],
   hooks: {
+    onDevServerStarted: [
+      () => import("./presenter-plugin/on-dev.js")
+    ],
     onBuildStarting: [
       () => import('@adonisjs/vite/build_hook'),
       () => import('#hooks/qwik-server-build'),
     ],
+    onBuildCompleted: [() => import("#hooks/qwik-cleanup-build")]
   },
   assetsBundler: false,
 })
