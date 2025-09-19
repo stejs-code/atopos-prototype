@@ -51,6 +51,6 @@ async function getTemplates() {
   })
 
   jsCode += `};`
-  console.log(jsCode)
+
   return jsCode
 }

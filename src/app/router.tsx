@@ -1,7 +1,24 @@
-import { component$, createContextId, useServerData, useSignal, useStore, useTask$ } from '@qwik.dev/core'
+import {
+  component$,
+  createContextId,
+  Signal,
+  useComputed$,
+  useContext,
+  useContextProvider,
+  useServerData,
+  useSignal,
+  useStore,
+  useTask$,
+} from '@qwik.dev/core'
 import type { AdoQwik } from '#services/qwik'
 import { views } from 'virtual:adonis-qwik-manifest'
-import ATpl from "~/views/a-tpl.js";
+import ATpl from '~/views/a-tpl.js'
+import { Loaders } from '../../app/loader.manifest'
+import type { QData } from '#classes/qwik/qwik_template'
+import { QwikLoader } from '../../loaders-plugin/qwik_loader'
+import QwikLocationLoader from '#classes/qwik/loaders/qwik_location_loader'
+import { ImportInfo } from '../../loaders-plugin'
+import { load } from 'hot-hook/loader'
 
 // import ATpl from './a-tpl.js'
 // import BTpl from './b-tpl.js'
@@ -11,19 +28,40 @@ import ATpl from "~/views/a-tpl.js";
 //   b: BTpl,
 // }
 
+export const loadersContext = createContextId<Record<string, any>>('app.loaders')
+
+export function useLoadersProvider() {
+  const qData = useServerData<QData>('qData')
+
+  const loadersStore = useStore(qData?.loaders ?? {})
+
+  useContextProvider(loadersContext, loadersStore)
+  return loadersStore
+}
+
+export function useLoader<T extends typeof QwikLoader>(
+  loaderClass: T | string
+): Awaited<InstanceType<T>['data']> {
+  const loaderName = typeof loaderClass === 'string' ? loaderClass : loaderClass.name
+  const loaders = useContext(loadersContext)
+
+  return loaders[loaderName];
+}
+
 export const Router = component$(() => {
-  const sData = useServerData<AdoQwik.RenderData>('location')
-  // console.log(sData)
-  // console.log(views)
+  const qLoaders = useLoadersProvider()
+  const qData = useServerData<QData>('qData')
   const tpl = useSignal<'a' | 'b'>('a')
 
   const Tpl = useStore<any>({
-    Component:"no component",
-    importUrl: "no component",
-  });
+    Component: undefined,
+    importUrl: 'no component',
+  })
 
-  useTask$(({track}) => {
-    const key = track(tpl) + "-tpl"
+  const ldata = useLoader(QwikLocationLoader)
+
+  useTask$(({ track }) => {
+    const key = track(tpl) + '-tpl'
 
     const loader = views[key]
     if (!loader) {
@@ -32,20 +70,20 @@ export const Router = component$(() => {
     const promise = loader()
     // console.log({ promise })
 
-    promise.then((module) => {
-      console.log(module)
-      Tpl.Component = module.default;
-      // Tpl.Component = module.default;
+    promise.then((module: any) => {
+      Tpl.Component = module.default
     })
-
-
   })
   // const Tpl = views[tpl.value + '-tpl'] as any
 
   return (
     <div>
       {/*<ATpl/>*/}
+      <pre>{JSON.stringify(ldata, null, 2)}</pre>
       <button onClick$={() => (tpl.value = tpl.value === 'a' ? 'b' : 'a')}>change tpl</button>
+      <button onClick$={() => {
+        qLoaders["QwikLocationLoader"] = {path: (Math.random() * 10000).toString()}
+      }}>xxxx tpl</button>
       <Tpl.Component />
       {/*<pre>{JSON.stringify(sData, null, 2)}</pre>*/}
     </div>
@@ -53,13 +91,13 @@ export const Router = component$(() => {
 })
 
 export function resolveNavigation(url: string) {
-  fetch()
+  // fetch()
 }
 
 type RouterStore = {}
 
 const RouterContext = createContextId('RouterContext')
-export function useRouterProvider(serverData: ServerData) {
+export function useRouterProvider(serverData) {
   const store = useStore({})
 }
 

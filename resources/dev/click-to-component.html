@@ -161,7 +161,7 @@
         filePath = prefix + filePath.slice(4);
       }
       const params = new URLSearchParams();
-      console.log(filePath)
+
       params.set('file', filePath);
       fetch('/__open-in-editor?' + params.toString());
     };

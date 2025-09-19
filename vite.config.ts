@@ -3,6 +3,9 @@ import { qwikVite } from '@qwik.dev/core/optimizer'
 import * as fs from 'node:fs'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import { vitePlugin } from './bin/vite-plugin'
+import { qwikLoadersPlugin } from './loaders-plugin'
+import Inspect from 'vite-plugin-inspect'
+
 
 export default defineConfig({
   base: '/dist/',
@@ -34,14 +37,18 @@ export default defineConfig({
   },
 
   plugins: [
-    tsconfigPaths({ root: '.' }),
-    vitePlugin(),
+    Inspect({
+      open: true
+    }),
+    qwikLoadersPlugin(),
     qwikVite({
       devSsrServer: false,
       ssr: {
         manifestInput: loadManifest(),
       },
     }),
+    tsconfigPaths({ root: '.' }),
+    vitePlugin(),
     // adonisjs({
     //   /**
     //    * Entrypoints of your application. Each entrypoint will

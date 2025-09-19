@@ -12,7 +12,7 @@ import { QwikEngineService } from '#services/qwik/qwik_engine_service'
 import { PassThrough } from 'node:stream'
 
 router.get('/', async (ctx) => {
-  const qwik = await ctx.containerResolver.make(QwikEngineService)
+  const qwik: QwikEngineService = await ctx.containerResolver.make(QwikEngineService)
 
   const pass = new PassThrough()
 

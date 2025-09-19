@@ -49,7 +49,7 @@ export class PresenterManifestBuilder {
     for (const presenter of this.presenters) {
       if (this.presenters[0] !== presenter) body += ',\n\n'
       if (!presenter.metadata) await presenter.loadMetaData()
-      body += `${tab}${presenter.pureClassName}: { declaration: () => import("${this.presenterImportPrefix}${presenter.relativeFilePath.replace('.ts', '.js')}"), metadata: ${JSON.stringify(presenter.metadata)}}`
+      body += `${tab}${presenter.pureClassName}: { declaration: () => import("${this.presenterImportPrefix}${presenter.relativeFilePath.replace('.ts', '')}").then(m => m.default), metadata: ${JSON.stringify(presenter.metadata)}}`
     }
 
     body += '\n} as const;\n\nexport default presenterRegistry\n'
@@ -71,12 +71,10 @@ export class PresenterManifestBuilder {
       }
 
       for await (const event of this.watchIterator) {
-        console.log(event)
         if (event.eventType === 'change') {
           const presenter = this.presenters.find(
             (presenter) => presenter.relativeFilePath === event.filename
           )
-          console.log(presenter)
 
           if (!presenter && event.filename) {
             const presenter = new PresenterFile(path.join(this.presenterDir, event.filename))
@@ -165,19 +163,19 @@ class PresenterFile {
   }
 }
 
-interface PresenterMetadata {
+export interface PresenterMetadata {
   methods: MethodMetadata[]
   className: string
   fileName: string
 }
 
-interface MethodMetadata {
+export interface MethodMetadata {
   parameters: ParameterMetadata[]
   name: string
   purpose: 'unknown' | 'action'
 }
 
-interface ParameterMetadata {
+export interface ParameterMetadata {
   name: string
   type: string
   optional: boolean

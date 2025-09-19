@@ -31,6 +31,7 @@
     "#start/*": "./start/*.js",
     "#hooks/*": "./hooks/*.js",
     "#tests/*": "./tests/*.js",
+    "#classes/*": "./app/classes/*.js",
     "#config/*": "./config/*.js"
   },
   "devDependencies": {
@@ -60,8 +61,11 @@
     "@adonisjs/static": "^1.1.1",
     "@adonisjs/vite": "^5.0.0-next.0",
     "lodash-es": "^4.17.21",
+    "magic-string": "^0.30.19",
     "neverthrow": "^8.2.0",
+    "oxc-parser": "^0.89.0",
     "reflect-metadata": "^0.2.2",
+    "vite-plugin-inspect": "^11.3.3",
     "zod": "^4.1.5"
   },
   "hotHook": {

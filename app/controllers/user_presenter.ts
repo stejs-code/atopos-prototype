@@ -1,9 +1,10 @@
-import { z } from 'zod/v4'
+import { Presenter } from '../../presenter-plugin/presenter.js'
+import QwikLocationLoader from '#classes/qwik/loaders/qwik_location_loader'
 
-export default class UserPresenter {
-  public actionDetail(id: string = 'a', data: any, x: boolean): void {
-    console.log('detxail', "aaaaaa")
+export default class UserPresenter extends Presenter {
+  public async actionDetail(id: string) {
+    this.tpl.setFile('a-tpl.tsx')
+    await this.tpl.addLoader(QwikLocationLoader, '', false)
+    // return id
   }
-
-
 }

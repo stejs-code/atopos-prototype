@@ -44,7 +44,7 @@ export default defineConfig({
       environment: ['repl', 'test'],
     },
     () => import('@adonisjs/vite/vite_provider'),
-    () => import('@adonisjs/static/static_provider')
+    () => import('@adonisjs/static/static_provider'),
   ],
 
   /*
@@ -92,14 +92,12 @@ export default defineConfig({
     },
   ],
   hooks: {
-    onDevServerStarted: [
-      () => import("./presenter-plugin/on-dev.js")
-    ],
+    onDevServerStarted: [() => import('./presenter-plugin/on-dev.js')],
     onBuildStarting: [
       () => import('@adonisjs/vite/build_hook'),
       () => import('#hooks/qwik-server-build'),
     ],
-    onBuildCompleted: [() => import("#hooks/qwik-cleanup-build")]
+    onBuildCompleted: [() => import('#hooks/qwik-cleanup-build')],
   },
   assetsBundler: false,
 })

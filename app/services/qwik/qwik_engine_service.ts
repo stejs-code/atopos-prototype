@@ -42,6 +42,9 @@ export class QwikEngineService {
     try {
       return ok(await func(opts))
     } catch (e) {
+      if (e instanceof Error) {
+        return err(e)
+      }
       return err({
         message: 'Failed to render',
         error: e,
@@ -53,11 +56,17 @@ export class QwikEngineService {
     if (app.inDev) {
       const runner = await vite.createModuleRunner()
 
+      try {
+
       return await runner.import('src/entry.ssr.tsx')
+      } catch (e) {
+        if (e instanceof SyntaxError) {
+          console.log(e.cause)
+        }
+        throw e
+      }
     } else {
       return await app.import('./server/build/entry.ssr.js')
-
-      // return {} as any
     }
   }
 
