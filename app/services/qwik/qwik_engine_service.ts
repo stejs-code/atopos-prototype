@@ -5,10 +5,11 @@ import { err, ok } from 'neverthrow'
 import { StreamWriter } from '@qwik.dev/core/internal'
 import app from '@adonisjs/core/services/app'
 import { QwikDevToolsService } from '#services/qwik/qwik_dev_tools_service'
+import { ModuleRunner } from 'vite/module-runner'
 
 export class QwikEngineService {
   async renderToStream(data: AdoQwik.RenderData, stream: StreamWriter) {
-    const module = await this.getModule()
+    const module = await this.getEntryModule()
 
     const opts: RenderToStreamOptions = {
       stream: stream,
@@ -52,13 +53,17 @@ export class QwikEngineService {
     }
   }
 
-  private async getModule(): Promise<typeof import('../../../src/entry.ssr.js')> {
+  /**
+   *
+   * @param fileName e.g. views/a-tpl for src/views/a-tpl.tsx
+   * @private
+   */
+  public async getModule(fileName: string): Promise<any> {
     if (app.inDev) {
-      const runner = await vite.createModuleRunner()
+      const runner = await this.getRunner()
 
       try {
-
-      return await runner.import('src/entry.ssr.tsx')
+        return await runner.import(`src/${fileName}.tsx`)
       } catch (e) {
         if (e instanceof SyntaxError) {
           console.log(e.cause)
@@ -66,8 +71,12 @@ export class QwikEngineService {
         throw e
       }
     } else {
-      return await app.import('./server/build/entry.ssr.js')
+      return await app.import(`./server/${fileName}.js`)
     }
+  }
+
+  private getEntryModule(): Promise<typeof import('../../../src/entry.ssr.js')> {
+    return this.getModule('entry.ssr')
   }
 
   protected getBase() {
@@ -76,6 +85,20 @@ export class QwikEngineService {
     } else {
       return '/dist/build'
     }
+  }
+
+  private runner?: ModuleRunner
+  private async getRunner() {
+    if (!this.runner) {
+      this.runner = await vite.createModuleRunner()
+      // optional: clean up on shutdown
+      process.once('exit', () => this.runner?.close?.())
+      process.once('SIGINT', () => {
+        this.runner?.close?.()
+        process.exit()
+      })
+    }
+    return this.runner
   }
 }
 

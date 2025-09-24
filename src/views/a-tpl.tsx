@@ -1,5 +1,5 @@
 import { component$ } from '@qwik.dev/core'
-import { useLoader, useLoadersProvider } from '~/app/router'
+import { useLoader } from '~/app/router'
 import QwikLocationLoader from '#classes/qwik/loaders/qwik_location_loader'
 
 export default component$(() => {

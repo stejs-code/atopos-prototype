@@ -5,13 +5,18 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 import { vitePlugin } from './bin/vite-plugin'
 import { qwikLoadersPlugin } from './loaders-plugin'
 import Inspect from 'vite-plugin-inspect'
+import ssrTemplatesEntrypoint from './loaders-plugin/templates'
 
 
 export default defineConfig({
   base: '/dist/',
-  server: {
-    hmr: false,
-  },
+  // server: {
+  //   hmr: false,        // no websocket, no auto refresh
+  //   watch: {           // keep chokidar watching so manual reload sees fresh code
+  //     usePolling: true,
+  //     interval: 100
+  //   }
+  // },
   publicDir: false,
   build: {
     minify: false,
@@ -21,6 +26,7 @@ export default defineConfig({
     emptyOutDir: false, // don’t wipe the whole folder
     assetsDir: 'build', // images/fonts go here: public/dist/assets/
     rollupOptions: {
+      input: {"entry.ssr":"src/entry.ssr.tsx"},
       output: {
         entryFileNames: 'build/[name].js',
         chunkFileNames: 'build/[name]-[hash].js',
@@ -35,11 +41,20 @@ export default defineConfig({
       },
     },
   },
+  // optimizeDeps: {
+  //   // Put problematic deps that break bundling here, mostly those with binaries.
+  //   // For example ['better-sqlite3'] if you use that in server functions.
+  //   exclude: [
+  //
+  //   ],
+  // },
+
 
   plugins: [
     Inspect({
       open: true
     }),
+    ssrTemplatesEntrypoint({ dir:"src/views"}),
     qwikLoadersPlugin(),
     qwikVite({
       devSsrServer: false,

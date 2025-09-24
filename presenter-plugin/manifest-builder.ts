@@ -35,10 +35,27 @@ export class PresenterManifestBuilder {
     await Promise.all(this.presenters.map((i) => i.metadataPromise))
   }
 
-  static async emit(): Promise<void> {
-    const body = await this.renderToString()
 
-    await fs.promises.writeFile(this.manifestPath, body)
+  static async emit(): Promise<void> {
+    const body = await this.renderToString();
+
+    try {
+      // Read existing contents (if file exists)
+      const existing = await fs.promises.readFile(this.manifestPath, "utf-8");
+
+      // Only write if contents differ
+      if (existing === body) {
+        return; // No change, skip writing
+      }
+    } catch (err: any) {
+      if (err.code !== "ENOENT") {
+        // Rethrow if it's not a "file not found" error
+        throw err;
+      }
+      // If file doesn't exist, we'll just write it
+    }
+
+    await fs.promises.writeFile(this.manifestPath, body);
   }
 
   static async renderToString(): Promise<string> {

@@ -13,7 +13,7 @@ export class QwikDevToolsService {
   public getSSREnd() {
     return `
       <style>${VITE_ERROR_OVERLAY_STYLES}</style>
-      <script type="module" src="/@vite/client"></script>
+      <script type="module" src="/dist/@vite/client"></script>
       ${this.devToolsHtml.errorHost}
       ${this.devToolsHtml.perfWarning}
       ${this.getDevQwikInspector()}

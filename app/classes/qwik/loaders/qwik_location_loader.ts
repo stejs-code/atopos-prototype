@@ -1,10 +1,10 @@
-import { QwikLoader, QwikPassthroughLoader } from '../../../../loaders-plugin/qwik_loader.js'
+import { QwikLoader } from '../../../../loaders-plugin/qwik_loader.js'
 
 
 // type Arguments = Parameters<(testText: string) => void>
 
 export default class QwikLocationLoader extends QwikLoader {
-  load(testText: string, anotherParam: boolean | "xd") {
+  load() {
     return {
       path: this.httpContext.request.url(false)
     }

@@ -1,16 +1,15 @@
 import { inject } from '@adonisjs/core'
 import { QwikEngineService } from '#services/qwik/qwik_engine_service'
 import { StreamWriter } from '@qwik.dev/core/internal'
-import {
-  InferLoaderParameters,
-  QwikLoader,
-} from '../../../loaders-plugin/qwik_loader'
+import { InferLoaderParameters, QwikLoader } from '../../../loaders-plugin/qwik_loader'
 import QwikLocationLoader from './loaders/qwik_location_loader.js'
 import { HttpContext } from '@adonisjs/core/http'
+import { assignWith } from 'lodash-es'
+import { getRawAsset } from 'node:sea'
 
 @inject()
 export class QwikTemplate {
-  public templateFile?: string
+  public templateFile?: string // a-tpl
   protected loaders: QwikLoader[] = []
   public loaderStrategy: 'eager' | 'lazy' = 'eager'
 
@@ -37,9 +36,8 @@ export class QwikTemplate {
   }
 
   async renderToStream(stream: StreamWriter) {
-    await this.addLoader(QwikLocationLoader, '', 'xd')
-
-    const qData = await this.getQData()
+    const qData = await this.getQData({ loadTemplateComponent: true })
+    console.log(qData.route.template.Component({}))
 
     return await this.qwik.renderToStream(
       {
@@ -49,7 +47,11 @@ export class QwikTemplate {
     )
   }
 
-  async getQData() {
+  async getQData(opts?: { loadTemplateComponent?: boolean }) {
+    await this.addLoader(QwikLocationLoader)
+
+    // await new Promise<void>((resolve) => setTimeout(resolve, 200))
+
     const promises = this.loaders.map((loader) =>
       loader.data.then((data) => {
         return [loader.constructor.name, data]
@@ -59,11 +61,22 @@ export class QwikTemplate {
     const loaders = await Promise.all(promises)
 
     return {
-      loaders: Object.fromEntries(loaders)
+      loaders: Object.fromEntries(loaders),
+      route: {
+        template: await this.getTemplate(opts),
+      },
+    }
+  }
+
+  async getTemplate(opts?: { loadTemplateComponent?: boolean }) {
+    return {
+      key: this.templateFile,
+      modulePath: `/dist/src/views/${this.templateFile}.js`,
+      Component: opts?.loadTemplateComponent
+        ? await this.qwik.getModule(`views/${this.templateFile!}`).then((res) => res.default)
+        : undefined,
     }
   }
 }
 
-export type QData = {
-  loaders: [string, any][]
-}
+export type QData = Awaited<ReturnType<QwikTemplate['getQData']>>

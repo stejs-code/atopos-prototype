@@ -1,10 +1,14 @@
 import { Presenter } from '../../presenter-plugin/presenter.js'
-import QwikLocationLoader from '#classes/qwik/loaders/qwik_location_loader'
 
 export default class UserPresenter extends Presenter {
   public async actionDetail(id: string) {
-    this.tpl.setFile('a-tpl.tsx')
-    await this.tpl.addLoader(QwikLocationLoader, '', false)
+    console.log('detail', id)
+    this.tpl.setFile('a-tpl')
     // return id
+  }
+
+  public async actionEdit(id: string) {
+    console.log('edit', id)
+    this.tpl.setFile('b-tpl')
   }
 }

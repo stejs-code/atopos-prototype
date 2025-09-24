@@ -7,7 +7,7 @@ export class QwikLoader {
   constructor(protected httpContext: HttpContext) {}
 
   resolve<TLoader extends QwikLoader>(
-    loader: new (...a: any) => TLoader
+    _loader: new (...a: any) => TLoader
   ): Promise<InferLoaderData<TLoader>> {
     return {} as any // TODO
   }

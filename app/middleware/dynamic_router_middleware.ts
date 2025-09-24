@@ -9,7 +9,7 @@ import { Presenter } from '../../presenter-plugin/presenter'
 import { PassThrough } from 'node:stream'
 
 export default class DynamicRouterMiddleware {
-  async handle(ctx: HttpContext, next: NextFn) {
+  async handle(ctx: HttpContext, _next: NextFn) {
     // await next()
 
     const ctxAfter = await ctx.containerResolver.make(HttpContext)
@@ -70,6 +70,7 @@ export class DynamicRoute {
   ) {}
 
   async execute(httpContext: HttpContext): Promise<void> {
+    const { response } = httpContext
     if (!this.presenterExists()) {
       // `Presenter ${this.presenter} not found`
       return
@@ -96,28 +97,42 @@ export class DynamicRoute {
 
     const args = this.deriveArgumentsFromRequest(httpContext.request, methodMeta)
 
-    const response = await action.bind(instance, ...args)()
+    const actionResponse = await action.bind(instance, ...args)()
 
     const tpl = instance.getTemplate()
     // TODO add, maybe, something
-    if (typeof response === 'string') {
-      httpContext.response.header('Content-Type', 'text/plain')
-      httpContext.response.send(response)
-    } else if (response instanceof Response) {
-      httpContext.response.send(response)
+    if (typeof actionResponse === 'string') {
+      response.header('Content-Type', 'text/plain')
+      response.send(actionResponse)
+    } else if (actionResponse instanceof Response) {
+      response.send(actionResponse)
     } else if (tpl) {
       const isQData = 'q-data' in httpContext.request.qs()
 
       if (!isQData) {
         const pass = new PassThrough()
 
-        httpContext.response.stream(pass)
+        response.stream(pass)
 
         await tpl.renderToStream(pass)
 
         pass.end()
       } else {
-        httpContext.response.send(await tpl.getQData())
+        const templateInfo = await tpl.getTemplate()
+        response.header('X-Prefetch-Modules', JSON.stringify([templateInfo.modulePath]))
+        response.header('Content-Type', 'text/plain; charset=utf-8')
+        response.header('Cache-Control', 'no-cache')
+        response.header('X-Accel-Buffering', 'no') // helps with Nginx
+        response.header('Transfer-Encoding', 'chunked')
+
+        // Send headers now
+        response.relayHeaders()
+        response.response.flushHeaders()
+
+        const qData = await tpl.getQData()
+        response.response.write(JSON.stringify(qData))
+
+        response.response.end()
       }
     }
   }

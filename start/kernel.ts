@@ -10,11 +10,6 @@
 
 import router from '@adonisjs/core/services/router'
 import server from '@adonisjs/core/services/server'
-import app from '@adonisjs/core/services/app'
-import { ModuleRunner } from 'vite/module-runner'
-
-ModuleRunner
-
 /**
  * The error handler is used to convert an exception
  * to an HTTP response.
