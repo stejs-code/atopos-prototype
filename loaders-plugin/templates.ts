@@ -25,7 +25,7 @@ export default function ssrTemplatesEntrypoint(opts: Opts): Plugin {
     name: 'ssr-entries-from-dir',
     enforce: 'pre',
 
-    config(user, env): UserConfig | void {
+    config(user): UserConfig | void {
       // if (!env.isSsrBuild) return; // only touch SSR builds
 
       const abs = resolve(process.cwd(), dir);

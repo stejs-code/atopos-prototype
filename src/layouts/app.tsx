@@ -1,5 +1,6 @@
 import { component$, Slot } from '@qwik.dev/core'
-import { Link } from '~/app/router'
+
+import { Link } from '~/app/link'
 
 export default component$(() => {
   return (

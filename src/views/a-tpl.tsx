@@ -1,6 +1,6 @@
 import { component$ } from '@qwik.dev/core'
-import { useLoader } from '~/app/router'
 import QwikLocationLoader from '#classes/qwik/loaders/qwik_location_loader'
+import { useLoader } from '~/app/utils'
 
 export default component$(() => {
   const location = useLoader(QwikLocationLoader)
