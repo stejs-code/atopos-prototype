@@ -4,12 +4,11 @@ import { StreamWriter } from '@qwik.dev/core/internal'
 import { InferLoaderParameters, QwikLoader } from '../../../loaders-plugin/qwik_loader'
 import QwikLocationLoader from './loaders/qwik_location_loader.js'
 import { HttpContext } from '@adonisjs/core/http'
-import { assignWith } from 'lodash-es'
-import { getRawAsset } from 'node:sea'
 
 @inject()
 export class QwikTemplate {
-  public templateFile?: string // a-tpl
+  public templateFile?: string // a-tpl -> resolves to views/a-tpl.tsx
+  public layoutFile?: string // blank -> resolves to layouts/blank.tsx
   protected loaders: QwikLoader[] = []
   public loaderStrategy: 'eager' | 'lazy' = 'eager'
 
@@ -18,12 +17,16 @@ export class QwikTemplate {
     protected qwik: QwikEngineService
   ) {}
 
-  setFile(tpl: string) {
+  public setFile(tpl: string) {
     this.templateFile = tpl
     return this
   }
 
-  async addLoader<TLoader extends QwikLoader>(
+  public setLayout(tpl: string) {
+    this.layoutFile = tpl
+  }
+
+  public async addLoader<TLoader extends QwikLoader>(
     loader: new (...a: any) => TLoader,
     ...args: InferLoaderParameters<TLoader>
   ) {
@@ -35,9 +38,8 @@ export class QwikTemplate {
     this.loaders.push(instance)
   }
 
-  async renderToStream(stream: StreamWriter) {
+  public async renderToStream(stream: StreamWriter) {
     const qData = await this.getQData({ loadTemplateComponent: true })
-    console.log(qData.route.template.Component({}))
 
     return await this.qwik.renderToStream(
       {
@@ -47,10 +49,10 @@ export class QwikTemplate {
     )
   }
 
-  async getQData(opts?: { loadTemplateComponent?: boolean }) {
+  public async getQData(opts?: { loadTemplateComponent?: boolean }) {
     await this.addLoader(QwikLocationLoader)
 
-    // await new Promise<void>((resolve) => setTimeout(resolve, 200))
+    // await new Promise<void>((resolve) => setTimeout(resolve, 20000))
 
     const promises = this.loaders.map((loader) =>
       loader.data.then((data) => {
@@ -64,17 +66,41 @@ export class QwikTemplate {
       loaders: Object.fromEntries(loaders),
       route: {
         template: await this.getTemplate(opts),
+        location: this.getLocation()
       },
     }
   }
 
-  async getTemplate(opts?: { loadTemplateComponent?: boolean }) {
+  public async getTemplate(opts?: { loadTemplateComponent?: boolean }) {
+    if (!this.templateFile || !this.layoutFile) {
+      throw new Error('Layout or view is not set')
+    }
+
     return {
-      key: this.templateFile,
-      modulePath: `/dist/src/views/${this.templateFile}.js`,
+      view: await this.getTemplateInfo(this.templateFile, { ...opts, directory: 'views' }),
+      layout: await this.getTemplateInfo(this.layoutFile, { ...opts, directory: 'layouts' }),
+    }
+  }
+
+  protected async getTemplateInfo(
+    fileName: string,
+    opts?: { loadTemplateComponent?: boolean; directory?: 'views' | 'layouts' }
+  ) {
+    const prefix = opts?.directory ? opts.directory + '/' : ''
+
+    return {
+      key: fileName,
+      modulePath: `/dist/src/${prefix}${fileName}.js`,
       Component: opts?.loadTemplateComponent
-        ? await this.qwik.getModule(`views/${this.templateFile!}`).then((res) => res.default)
+        ? await this.qwik.getModule(`${prefix}${fileName}`).then((res) => res.default)
         : undefined,
+    }
+  }
+
+  protected getLocation() {
+    return {
+      path: this.httpContext.request.parsedUrl.path,
+      reqId: this.httpContext.request.id()
     }
   }
 }

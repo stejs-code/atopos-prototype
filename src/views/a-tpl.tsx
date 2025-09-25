@@ -5,12 +5,12 @@ import QwikLocationLoader from '#classes/qwik/loaders/qwik_location_loader'
 export default component$(() => {
   const location = useLoader(QwikLocationLoader)
   return (
-    <div>
+    <div title={'a-tpl'}>
       <div style={{ background: 'red' }}>
-        aAAx
+        <b>this is A view</b>
         <pre>{JSON.stringify(location)}</pre>
       </div>
-      this is AAAA compoentnt
     </div>
   )
 })
+

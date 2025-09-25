@@ -1,9 +1,16 @@
 import { Presenter } from '../../presenter-plugin/presenter.js'
 
 export default class UserPresenter extends Presenter {
+  startup() {
+    super.startup()
+
+    this.tpl.setLayout("app")
+  }
+
   public async actionDetail(id: string) {
     console.log('detail', id)
     this.tpl.setFile('a-tpl')
+
     // return id
   }
 

@@ -119,7 +119,7 @@ export class DynamicRoute {
         pass.end()
       } else {
         const templateInfo = await tpl.getTemplate()
-        response.header('X-Prefetch-Modules', JSON.stringify([templateInfo.modulePath]))
+        response.header('X-Prefetch-Modules', JSON.stringify([templateInfo.view.modulePath, templateInfo.layout.modulePath]))
         response.header('Content-Type', 'text/plain; charset=utf-8')
         response.header('Cache-Control', 'no-cache')
         response.header('X-Accel-Buffering', 'no') // helps with Nginx

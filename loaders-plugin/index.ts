@@ -1,6 +1,5 @@
 import type { Plugin } from 'vite'
 import { QwikLoadersTransform } from './core/QwikLoadersTransform'
-import ssrTemplatesEntrypoint from './templates'
 
 export function qwikLoadersPlugin(): Plugin {
   const engine = new QwikLoadersTransform()

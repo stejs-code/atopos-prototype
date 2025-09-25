@@ -3,46 +3,21 @@ import {
   Component,
   component$,
   createContextId,
-  jsx,
   noSerialize,
   NoSerialize,
   PropsOf,
   QRL,
-  Signal,
   Slot,
   useContext,
   useContextProvider,
+  useOnWindow,
   useServerData,
-  useSignal,
   useStore,
   useTask$,
 } from '@qwik.dev/core'
 import type { QData } from '#classes/qwik/qwik_template'
 import { QwikLoader } from '../../loaders-plugin/qwik_loader'
-import {
-  _getContextContainer,
-  _getContextElement,
-  _waitUntilRendered,
-} from '@qwik.dev/core/internal'
-
-// import ATpl from './a-tpl.js'
-// import BTpl from './b-tpl.js'
-//
-// const tplRegistry = {
-//   a: ATpl,
-//   b: BTpl,
-// }
-
-// export const loadersContext = createContextId<Record<string, any>>('app.loaders')
-//
-// export function useLoadersProvider() {
-//   const qData = useServerData<QData>('qData')
-//
-//   const loadersStore = useStore(qData?.loaders ?? {})
-//
-//   useContextProvider(loadersContext, loadersStore)
-//   return loadersStore
-// }
+import { err } from 'neverthrow'
 
 export function useLoader<T extends typeof QwikLoader>(
   loaderClass: T | string
@@ -55,13 +30,21 @@ export function useLoader<T extends typeof QwikLoader>(
 
 type RouterStore = {
   loading: boolean
-  Template: Component
+  ViewComponent: Component
+  LayoutComponent: Component
   loaders: Record<string, any>
   navigationQueue: {
     href: string
     abort: NoSerialize<AbortController>
     startTime: number
     promise?: Promise<void>
+    shouldRender: boolean
+    replaceState: boolean
+    data?: {
+      View: Component
+      Layout: Component
+      qData: QData
+    }
   }[]
 }
 
@@ -81,50 +64,108 @@ function getComponentQrl(c: unknown): QRL | undefined {
 
 export const Router = component$(() => {
   const qData = useServerData<QData>('qData')
-  const templateSig = useSignal(noSerialize(qData?.route.template.Component))
   const router = useStore<RouterStore>({
     loading: false,
-    Template: noSerialize(qData?.route.template.Component),
+    ViewComponent: noSerialize(qData?.route.template.view.Component),
+    LayoutComponent: noSerialize(qData?.route.template.layout.Component),
     navigationQueue: [],
     loaders: qData?.loaders ?? {},
   })
 
-  useContextProvider(routerTemplateContext, templateSig)
   useContextProvider(routerContext, router)
+
+  const navigate = useNavigate()
+
+  useOnWindow(
+    'popstate',
+    $(async () => {
+      const url = new URL(window.location.href)
+      console.log(url.pathname + url.search)
+      await navigate(url.pathname + url.search, { replaceState: true })
+    })
+  )
 
   useTask$(({ track }) => {
     track(() => router.navigationQueue.map((r) => r.startTime))
 
     router.navigationQueue.forEach((r) => {
       if (r.promise) return
-      router.loading = true
+      if (r.shouldRender) router.loading = true
 
       r.promise = new Promise<void>(async (resolve, reject) => {
-        const url = new URL(r.href, window.location.href)
-        url.searchParams.append('q-data', '')
+        try {
+          const url = new URL(r.href, window.location.href)
+          url.searchParams.append('q-data', '')
 
-        const res = await fetch(url, {
-          signal: r.abort?.signal,
-        })
+          const res = await fetch(url, {
+            signal: r.abort?.signal,
+          })
 
-        const prefetchModules = res.headers.get('X-Prefetch-Modules')
-        const modules = typeof prefetchModules === 'string' ? JSON.parse(prefetchModules) : []
-        console.log(modules)
-        modules.forEach((path: string) => import(/* @vite-ignore */ path))
+          const prefetchModules = res.headers.get('X-Prefetch-Modules')
 
-        // await new Promise<void>((resolve) => setTimeout(resolve, 8000))
-        const qData: QData = await res.json()
+          function tryJsonParse(): string[] {
+            try {
+              return typeof prefetchModules === 'string' ? JSON.parse(prefetchModules) : []
+            } catch (e) {
+              return []
+            }
+          }
 
-        const Component = await import(/* @vite-ignore */ qData.route.template.modulePath).then(
-          (r) => r.default
-        )
+          async function importDefault(path: string) {
+            const module = await import(/* @vite-ignore */ path)
 
-        await getComponentQrl(Component)?.resolve()
+            return module.default
+          }
 
-        if (router.navigationQueue.at(-1)?.startTime === r.startTime) {
-          spaRender(router, Component, qData, templateSig)
+          const modules = tryJsonParse()
+
+          for (const path of modules) {
+            try {
+              importDefault(path) //
+                .then((imp) => getComponentQrl(imp)?.resolve())
+            } catch (e) {
+              console.error('Error caught while prefetching modules:', e)
+            }
+          }
+
+          // await new Promise<void>((resolve) => setTimeout(resolve, 8000))
+          const qData: QData = await res.json()
+
+          const Layout = importDefault(qData.route.template.layout.modulePath)
+          const Component = importDefault(qData.route.template.view.modulePath)
+
+          Layout.then(async (comp) => {
+            const qrl = getComponentQrl(comp)
+            await qrl?.resolve()
+            console.log('cap', qrl?.getCaptured())
+            console.log('cap', qrl)
+          })
+
+          await Promise.all([
+            Layout.then((comp) => getComponentQrl(comp)?.resolve()),
+            Component.then((comp) => getComponentQrl(comp)?.resolve()),
+          ])
+
+          const latestRoute = router.navigationQueue.at(-1)
+
+          r.data = {
+            View: await Component,
+            Layout: await Layout,
+            qData,
+          }
+
+          if (latestRoute === r && latestRoute.shouldRender) {
+            renderRoute(router, latestRoute)
+          }
+
+          resolve()
+        } catch (e) {
+          console.error('Route fetching failed:', e)
+          resolve()
+
+          const rIndex = router.navigationQueue.findIndex(i => i ===r)
+          router.navigationQueue.splice(rIndex, 1)
         }
-        resolve()
       })
     })
   })
@@ -150,52 +191,65 @@ export const Router = component$(() => {
   // const comp = jsx(templateSig.value, {})
 
   return (
-    <div>
-      <p>state: {router.loading ? 'loading...' : 'loaded'}</p>
-      <pre>{JSON.stringify(router.loaders, null, 2)}</pre>
-      <button
-        onClick$={() => {
-          // @ts-ignore
-          router.loaders['QwikLocationLoader'] = { path: (Math.random() * 10000).toString() }
-        }}
-      >
-        xxxx tpl
-      </button>
-
-      <router.Template />
-
-      <Link href="/user/detail?id=1">detail</Link>
-      <Link href="/user/edit?id=1">edit</Link>
-      {/*<pre>{JSON.stringify(sData, null, 2)}</pre>*/}
-    </div>
+    <router.LayoutComponent>
+      <router.ViewComponent />
+    </router.LayoutComponent>
   )
 })
 
-export function spaRender(
-  router: RouterStore,
-  Template: Component,
-  qData: QData,
-  templateSig: Signal
-) {
-  console.log('laoded', Template, qData)
-  router.Template = Template
+export function renderRoute(router: RouterStore, route: RouterStore['navigationQueue'][number]) {
+  if (!route.data) {
+    console.error("Tried to render a route, which data wasn't loaded yet")
+    return
+  }
+  const { View, Layout, qData } = route.data
+
+  router.ViewComponent = View
+  router.LayoutComponent = Layout
   router.loaders = qData.loaders
 
-  // templateSig.force()
-  // _waitUntilRendered(_getContextElement() as any).then(() => {
-  //
+  const url = new URL(qData.route.location.path!, window.location.origin)
+  url.searchParams.delete('q-data')
+  if (route.replaceState) {
+    window.history.replaceState({}, '', url)
+  } else {
+    window.history.pushState({}, '', url)
+  }
+
   router.loading = false
-  // })
+
+  const index = router.navigationQueue.findIndex((r) => r === route)
+  router.navigationQueue.splice(index, 1)
 }
 
+type NavigateOptions = {
+  justPrefetch?: boolean
+  replaceState?: boolean
+}
 export function useNavigate() {
   const router = useContext(routerContext)
-  return $((href: string) => {
-    router.navigationQueue.push({
-      href,
-      abort: noSerialize(new AbortController()),
-      startTime: Date.now(),
+  return $((href: string, opts?: NavigateOptions) => {
+    const fromQueue = router.navigationQueue.find((r) => {
+      return !r.shouldRender && r.href === href && r.promise
     })
+
+    if (fromQueue && !opts?.justPrefetch) {
+      router.loading = true
+      if (!fromQueue.shouldRender) {
+        fromQueue.shouldRender = true
+        renderRoute(router, fromQueue)
+      }
+    } else if (!fromQueue) {
+      router.navigationQueue.push({
+        href,
+        replaceState: !!opts?.replaceState,
+        abort: noSerialize(new AbortController()),
+        startTime: Date.now(),
+        shouldRender: !opts?.justPrefetch,
+      })
+    }
+
+    console.log(JSON.parse(JSON.stringify(router.navigationQueue)))
   })
 }
 
@@ -207,56 +261,15 @@ export const Link = component$<LinkProps>((props) => {
   return (
     <a
       {...rest}
-      onMouseEnter$={() => {}}
       preventdefault:click
-      onClick$={() => {
-        navigate(rest.href!)
+      onMouseEnter$={async () => {
+        await navigate(rest.href!, { justPrefetch: true })
+      }}
+      onClick$={async () => {
+        await navigate(rest.href!)
       }}
     >
       <Slot />
     </a>
   )
 })
-
-// export function resolveNavigation(url: string) {
-//   // fetch()
-// }
-//
-// type RouterStore = {}
-//
-// const RouterContext = createContextId('RouterContext')
-// export function useRouterProvider(serverData) {
-//   const store = useStore({})
-// }
-
-// import { component$, createContextId, useServerData, useSignal, useStore } from '@qwik.dev/core'
-// import type { AdoQwik } from '#services/qwik'
-// import ATpl from './a-tpl.js'
-// import BTpl from './b-tpl.js'
-//
-// const tplRegistry = {
-//   a: ATpl,
-//   b: BTpl,
-// }
-//
-// export const Router = component$(() => {
-//   const sData = useServerData<AdoQwik.RenderData>('location')
-//   console.log(sData)
-//   const tpl = useSignal<keyof typeof tplRegistry>('a')
-//   const Tpl = tplRegistry[tpl.value] as any
-//
-//   return (
-//     <div>
-//       <button onClick$={() => (tpl.value = tpl.value === 'a' ? 'b' : 'a')}>change tpl</button>
-//       <Tpl/>
-//       <pre>{JSON.stringify(sData, null, 2)}</pre>
-//     </div>
-//   )
-// })
-//
-// type RouterStore = {}
-//
-// const RouterContext = createContextId('RouterContext')
-// export function useRouterProvider(serverData: ServerData) {
-//   const store = useStore({})
-// }
