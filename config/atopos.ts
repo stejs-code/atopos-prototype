@@ -1,4 +1,5 @@
-import { defineConfig } from '../atopos/server/config.js'
+import { defineConfig, namedRoute } from '../atopos/server/config.js'
+import UserPresenter from '#controllers/user_presenter'
 
 export const atopos = defineConfig({
   // atoposManifestPath: './app/presenter-manifest.ts',
@@ -6,5 +7,9 @@ export const atopos = defineConfig({
 
   presentersDir: './app/controllers',
 
-  serverLoadedViteDir: ['src/views', 'src/layouts']
+  serverLoadedViteDir: ['src/views', 'src/layouts'],
+
+  router: {
+    '/user/:id/detail': namedRoute(UserPresenter, "actionDetail"),
+  },
 })

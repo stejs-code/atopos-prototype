@@ -1,3 +1,5 @@
+import { Presenter } from './presenter.js'
+
 export type CommonPresenterRegistry = Record<
   any,
   {
@@ -40,6 +42,13 @@ export type AtoposUserConfig = {
      */
     manifestPath: string // "manifest.atopos.json"
   }
+
+  router: Record<string, NamedRoute>
+}
+
+export interface NamedRoute {
+  presenterId: string
+  action: string
 }
 
 export type AtoposConfig = {
@@ -51,6 +60,8 @@ export type AtoposConfig = {
     serverDir: string
     manifestPath: string
   }
+
+  router: Record<string, NamedRoute>
 }
 function toArray<T>(input: MaybeArray<T>): T[] {
   return Array.isArray(input) ? input : [input]
@@ -67,5 +78,15 @@ export function defineConfig(config: AtoposUserConfig): AtoposConfig {
       serverDir: config.build?.serverDir ?? 'server',
       manifestPath: config.build?.manifestPath ?? 'atopos.manifest.json',
     },
+  }
+}
+
+export function namedRoute<T extends typeof Presenter>(
+  presenter: T,
+  action: keyof InstanceType<T>
+) {
+  return {
+    presenterId: Presenter.parsePresenterId(presenter.name),
+    action: Presenter.parseActionId(action.toString()),
   }
 }

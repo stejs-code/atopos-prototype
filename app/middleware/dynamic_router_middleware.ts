@@ -58,6 +58,7 @@ export class DynamicRoute {
     public params: Record<string, number | string | true>
   ) {
     this.presenterId = Presenter.parsePresenterId(presenterId)
+    this.action = Presenter.parseActionId(action)
   }
 
   async execute(httpContext: HttpContext): Promise<void> {

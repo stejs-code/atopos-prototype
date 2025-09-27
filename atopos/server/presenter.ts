@@ -1,6 +1,7 @@
 import { inject } from '@adonisjs/core'
 import { QwikTemplate } from '#classes/qwik/qwik_template'
 import { classNameString } from '../shared/utils.js'
+import { camelCase } from 'lodash-es'
 
 @inject()
 export class Presenter {
@@ -26,6 +27,16 @@ export class Presenter {
 
     if (input.endsWith('Presenter')) {
       input = input.substring(0, input.length - 'Presenter'.length)
+    }
+
+    return input
+  }
+
+  static parseActionId(input: string) {
+    input = camelCase(input)
+
+    if (input.startsWith('action')) {
+      input = input.substring('action'.length, input.length)
     }
 
     return input
