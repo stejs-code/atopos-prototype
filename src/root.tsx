@@ -1,12 +1,17 @@
 import { component$ } from '@qwik.dev/core'
-import { Router } from '../atopos/client/router'
+import { Router, useRouterProvider } from '../atopos/client/router'
+import { RouterHead } from '~/components/router-head.js'
 
 export default component$(() => {
+  useRouterProvider()
+
   return (
     <>
-      <head></head>
+      <head>
+        <RouterHead />
+      </head>
       <body>
-        <Router/>
+        <Router />
       </body>
     </>
   )

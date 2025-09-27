@@ -5,6 +5,7 @@ import {
   createContextId,
   noSerialize,
   NoSerialize,
+  useContext,
   useContextProvider,
   useOnWindow,
   useServerData,
@@ -14,6 +15,7 @@ import {
 import type { QData } from '#classes/qwik/qwik_template'
 import { getComponentQrl } from './utils'
 import { useNavigate } from './use-navigate'
+import { HeadElement } from '#classes/qwik/document_head'
 
 type RouterStore = {
   loading: boolean
@@ -33,12 +35,16 @@ type RouterStore = {
       qData: QData
     }
   }[]
+  head: {
+    elements: HeadElement[]
+    title: string
+  }
 }
 export type Route = RouterStore['navigationQueue'][number]
 
 export const routerContext = createContextId<RouterStore>('app.router')
 
-export const Router = component$(() => {
+export function useRouterProvider() {
   const qData = useServerData<QData>('qData')
   const router = useStore<RouterStore>({
     loading: false,
@@ -46,9 +52,17 @@ export const Router = component$(() => {
     LayoutComponent: noSerialize(qData?.route.template.layout.Component),
     navigationQueue: [],
     loaders: qData?.loaders ?? {},
+    head: qData?.route.head ?? {
+      elements: [],
+      title: '',
+    },
   })
 
   useContextProvider(routerContext, router)
+}
+
+export const Router = component$(() => {
+  const router = useContext(routerContext)
 
   const navigate = useNavigate()
 
@@ -156,6 +170,7 @@ export const renderRoute = $((router: RouterStore, route: Route) => {
   }
   const { View, Layout, qData } = route.data
 
+  router.head = route.data.qData.route.head
   router.ViewComponent = View
   router.LayoutComponent = Layout
   router.loaders = qData.loaders
@@ -173,3 +188,9 @@ export const renderRoute = $((router: RouterStore, route: Route) => {
   const index = router.navigationQueue.findIndex((r) => r === route)
   router.navigationQueue.splice(index, 1)
 })
+
+export function useHead() {
+  const router = useContext(routerContext)
+
+  return router.head
+}

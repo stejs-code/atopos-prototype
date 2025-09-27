@@ -1,3 +1,6 @@
-declare module 'virtual:adonis-qwik-manifest' {
-  export const views: Record<string, () => Promise<any>>
+/// <reference types="vite/client" />
+
+declare module '*.css?url' {
+  const url: string;
+  export default url;
 }

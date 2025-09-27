@@ -4,6 +4,7 @@ import { StreamWriter } from '@qwik.dev/core/internal'
 import { InferLoaderParameters, QwikLoader } from '../../../atopos/vite/loaders-plugin/qwik_loader'
 import QwikLocationLoader from './loaders/qwik_location_loader.js'
 import { HttpContext } from '@adonisjs/core/http'
+import DocumentHead from '#classes/qwik/document_head'
 
 @inject()
 export class QwikTemplate {
@@ -14,7 +15,8 @@ export class QwikTemplate {
 
   constructor(
     protected httpContext: HttpContext,
-    protected qwik: QwikEngineService
+    protected qwik: QwikEngineService,
+    public head: DocumentHead
   ) {}
 
   public setFile(tpl: string) {
@@ -24,6 +26,20 @@ export class QwikTemplate {
 
   public setLayout(tpl: string) {
     this.layoutFile = tpl
+    return this
+  }
+
+  public title: string = ''
+  public titleTemplate: (title: string) => string = (title) => title
+
+  public setTitleTemplate(func: (title: string) => string) {
+    this.titleTemplate = func
+    return this
+  }
+
+  public setTitle(title: string, useTemplate = true) {
+    this.title = useTemplate ? this.titleTemplate(title) : title
+    return this
   }
 
   public async addLoader<TLoader extends QwikLoader>(
@@ -65,8 +81,12 @@ export class QwikTemplate {
     return {
       loaders: Object.fromEntries(loaders),
       route: {
+        head: {
+          elements: this.head.getElements(),
+          title: this.title,
+        },
         template: await this.getTemplate(opts),
-        location: this.getLocation()
+        location: this.getLocation(),
       },
     }
   }
@@ -100,7 +120,7 @@ export class QwikTemplate {
   protected getLocation() {
     return {
       path: this.httpContext.request.parsedUrl.path,
-      reqId: this.httpContext.request.id()
+      reqId: this.httpContext.request.id(),
     }
   }
 }
