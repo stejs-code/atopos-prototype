@@ -25,7 +25,7 @@ export default function registerEntryPoints(opts: Opts): Plugin {
     name: 'vite-adonis-entry-points',
     enforce: 'pre',
 
-    config(user): UserConfig | void {
+    config(user, { command }): UserConfig | void {
       const input: Record<string, string> = {}
 
       for (const dir of dirs) {
@@ -41,7 +41,18 @@ export default function registerEntryPoints(opts: Opts): Plugin {
       }
 
       const finalInput = mergeRollupInputs(user.build?.rollupOptions?.input, input)
-      finalInput["src/entry.ssr"] =  'src/entry.ssr.tsx'
+      finalInput['src/entry.ssr'] = 'src/entry.ssr.tsx'
+
+      const naming =
+        command === 'build'
+          ? {
+              chunkFileNames: '[hash].js',
+              assetFileNames: '[hash][extname]',
+            }
+          : {
+              chunkFileNames: 'chunks/[name]-[hash].js',
+              assetFileNames: 'assets/[name]-[hash][extname]',
+            }
 
       return {
         build: {
@@ -50,8 +61,7 @@ export default function registerEntryPoints(opts: Opts): Plugin {
             input: finalInput,
             output: {
               entryFileNames,
-              chunkFileNames: 'chunks/[name]-[hash].js',
-              assetFileNames: 'assets/[name]-[hash][extname]',
+              ...naming,
               ...(preserveModules
                 ? {
                     preserveModules: true,

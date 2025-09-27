@@ -6,8 +6,7 @@ export default component$(() => {
   const location = useLoader(QwikLocationLoader)
   return (
     <div title={'a-tpl'}>
-      <button class="btn">One</button>
-
+      <button class="btn btn-primary">One</button>
       <div style={{ background: 'red' }}>
         <b>this is A view</b>
         <pre>{JSON.stringify(location)}</pre>

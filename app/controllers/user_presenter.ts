@@ -14,6 +14,12 @@ export default class UserPresenter extends Presenter {
     // return id
   }
 
+  public async actionError() {
+    this.tpl.setFile('error-500')
+
+    // return id
+  }
+
   public async actionEdit(id: string) {
     console.log('edit', id)
     this.tpl.setFile('b-tpl')
