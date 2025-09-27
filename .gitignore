@@ -3,7 +3,7 @@ node_modules
 build
 tmp
 public/dist
-server
+./server
 
 # Secrets
 .env

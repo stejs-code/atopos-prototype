@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node bin/server.js",
     "build": "node ace build --ignore-ts-errors",
-    "dev": "node ace serve --hmr",
+    "dev": "node ace serve --hmr --clear=false",
     "test": "node ace test",
     "lint": "eslint .",
     "preview": "npm run build && cd build && npm ci --omit=\"dev\" &&  ENV_PATH=../ NODE_ENV=\"production\" node ./bin/server",

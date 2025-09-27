@@ -2,11 +2,10 @@ import { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
 import { strUtils } from '#services/util/string_util_service'
 import { camelCase, upperFirst } from 'lodash-es'
-import presenterRegistry from '../presenter-manifest.js'
 import { z } from 'zod/v4'
-import { MethodMetadata } from '../../presenter-plugin/manifest-builder'
-import { Presenter } from '../../presenter-plugin/presenter'
+import { Presenter } from '../../atopos/server/presenter.js'
 import { PassThrough } from 'node:stream'
+import { manifest, MethodMetadata } from '../../atopos/shared/manifest/manifest.js'
 
 export default class DynamicRouterMiddleware {
   async handle(ctx: HttpContext, _next: NextFn) {
@@ -59,22 +58,23 @@ export default class DynamicRouterMiddleware {
   }
 }
 
-type ManifestKeys = keyof typeof presenterRegistry
-type ManifestVals = (typeof presenterRegistry)[ManifestKeys]
-
 export class DynamicRoute {
   constructor(
-    public presenter: string, // e.g. "User"
+    public presenterId: string, // e.g. "User"
     public action: string, // e.g. "detail"
     public params: Record<string, number | string | true>
-  ) {}
+  ) {
+    this.presenterId = Presenter.parsePresenterId(presenterId)
+  }
 
   async execute(httpContext: HttpContext): Promise<void> {
     const { response } = httpContext
+
     if (!this.presenterExists()) {
-      // `Presenter ${this.presenter} not found`
+      httpContext.response.send(`Presenter ${this.presenterId} not found`)
       return
     }
+
     const decl = await this.getPresenterClass()
     const instance: Presenter = await httpContext.containerResolver.make(decl)
 
@@ -85,10 +85,10 @@ export class DynamicRoute {
       throw new Error(`No method named ${acName}`)
     }
 
-    const methodMeta = this.getMetadata().methods.find((method) => method.name === acName)
+    const methodMeta = this.getMetadata()?.methods.find((method) => method.name === acName)
 
     if (!methodMeta) {
-      throw new Error(`No metadata found for method named ${acName}`)
+      throw new Error(`No metadata found for method ${this.presenterId}.${acName}`)
     }
 
     if (methodMeta.purpose !== 'action') {
@@ -119,7 +119,10 @@ export class DynamicRoute {
         pass.end()
       } else {
         const templateInfo = await tpl.getTemplate()
-        response.header('X-Prefetch-Modules', JSON.stringify([templateInfo.view.modulePath, templateInfo.layout.modulePath]))
+        response.header(
+          'X-Prefetch-Modules',
+          JSON.stringify([templateInfo.view.modulePath, templateInfo.layout.modulePath])
+        )
         response.header('Content-Type', 'text/plain; charset=utf-8')
         response.header('Cache-Control', 'no-cache')
         response.header('X-Accel-Buffering', 'no') // helps with Nginx
@@ -179,23 +182,23 @@ export class DynamicRoute {
   }
 
   getPresenterName() {
-    return this.presenter + 'Presenter'
+    return this.presenterId + 'Presenter'
   }
 
   presenterExists() {
-    return (this.presenter as ManifestKeys) in presenterRegistry
+    return manifest.presenters.has(this.presenterId)
   }
 
   getPresenterRecord() {
-    return presenterRegistry[this.presenter as ManifestKeys] as ManifestVals
+    return manifest.getPresenter(this.presenterId)
   }
 
-  getPresenterClass() {
-    return this.getPresenterRecord().declaration()
+  async getPresenterClass(): Promise<any> {
+    return await this.getPresenterRecord()?.declaration()
   }
 
   getMetadata() {
-    return this.getPresenterRecord().metadata
+    return this.getPresenterRecord()?.metadata
   }
 }
 

@@ -1,4 +1,4 @@
-import { QwikLoader } from '../../../../loaders-plugin/qwik_loader.js'
+import { QwikLoader } from '../../../../atopos/vite/loaders-plugin/qwik_loader.js'
 
 
 // type Arguments = Parameters<(testText: string) => void>

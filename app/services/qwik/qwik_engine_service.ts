@@ -71,7 +71,7 @@ export class QwikEngineService {
         throw e
       }
     } else {
-      return await app.import(`./server/${fileName}.js`)
+      return await app.import(`./server/src/${fileName}.js`)
     }
   }
 

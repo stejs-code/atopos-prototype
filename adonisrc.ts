@@ -45,6 +45,7 @@ export default defineConfig({
     },
     () => import('@adonisjs/vite/vite_provider'),
     () => import('@adonisjs/static/static_provider'),
+    () => import('./atopos/providers/atopos_provider.js')
   ],
 
   /*
@@ -92,12 +93,12 @@ export default defineConfig({
     },
   ],
   hooks: {
-    onDevServerStarted: [() => import('./presenter-plugin/on-dev.js')],
+    // onDevServerStarted: [() => import('./atopos/hooks/on-dev.js')],
     onBuildStarting: [
       () => import('@adonisjs/vite/build_hook'),
-      () => import('#hooks/qwik-server-build'),
+      () => import('./atopos/hooks/build_hook.js'),
     ],
-    onBuildCompleted: [() => import('#hooks/qwik-cleanup-build')],
+    onBuildCompleted: [() => import('./atopos/hooks/after_build_hook.js')],
   },
   assetsBundler: false,
 })

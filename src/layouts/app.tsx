@@ -1,6 +1,6 @@
 import { component$, Slot } from '@qwik.dev/core'
 
-import { Link } from '~/app/link'
+import { Link } from '../../atopos/client/link'
 
 export default component$(() => {
   return (

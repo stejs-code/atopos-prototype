@@ -1,4 +1,4 @@
-import { Presenter } from '../../presenter-plugin/presenter.js'
+import { Presenter } from '../../atopos/server/presenter.js'
 
 export default class UserPresenter extends Presenter {
   startup() {
