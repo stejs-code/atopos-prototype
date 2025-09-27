@@ -6,28 +6,21 @@ import { z } from 'zod/v4'
 import { Presenter } from '../../atopos/server/presenter.js'
 import { PassThrough } from 'node:stream'
 import { manifest, MethodMetadata } from '../../atopos/shared/manifest/manifest.js'
+import router from '@adonisjs/core/services/router'
 
 export default class DynamicRouterMiddleware {
-  async handle(ctx: HttpContext, _next: NextFn) {
-    // await next()
+  async handle(ctx: HttpContext, next: NextFn) {
+    if (router.match(ctx.request.url(false), ctx.request.method())) {
+      return await next()
+    }
 
-    const ctxAfter = await ctx.containerResolver.make(HttpContext)
-
-    if (ctxAfter.route?.handler) return // has been handled by some handler
     const route = await this.findRoute(ctx.request)
 
-    await route.execute(ctx)
-    // const url = ctxAfter.request.url()
-    // console.log(output)
-
-    // const instance = await ctxAfter.containerResolver.make(presenter)
-    // this.parseActionParameters(instance.actionDetail)
-    // const meta = Reflect.getMetadata('design:paramtypes', presenter.prototype, 'actionDetail')
-    // // const meta = Reflect.getMetadataKeys( presenter.prototype)
-    // console.log({ meta })
-    //
-    // // app.container.make()
-    // console.log(route, presenterModule)
+    if (await route.isExecutable(ctx)) {
+      await route.execute(ctx)
+    } else {
+      await next()
+    }
   }
 
   async findRoute(req: HttpContext['request']) {
@@ -75,11 +68,10 @@ export class DynamicRoute {
       return
     }
 
-    const decl = await this.getPresenterClass()
-    const instance: Presenter = await httpContext.containerResolver.make(decl)
+    const instance: Presenter = await this.getInstance(httpContext)
 
     const acName = this.getActionMethodName()
-    const action = instance[acName as keyof typeof instance] as Function
+    const action = await this.getAction(httpContext)
 
     if (!action) {
       throw new Error(`No method named ${acName}`)
@@ -97,7 +89,7 @@ export class DynamicRoute {
 
     const args = this.deriveArgumentsFromRequest(httpContext.request, methodMeta)
 
-    const actionResponse = await action.bind(instance, ...args)()
+    const actionResponse = await action(...args)
 
     const tpl = instance.getTemplate()
     // TODO add, maybe, something
@@ -140,7 +132,7 @@ export class DynamicRoute {
     }
   }
 
-  deriveArgumentsFromRequest(req: HttpContext['request'], methodMeta: ManifestMethodMetadata) {
+  deriveArgumentsFromRequest(req: HttpContext['request'], methodMeta: MethodMetadata) {
     return methodMeta.parameters.map((param) => {
       let value = undefined
 
@@ -197,21 +189,31 @@ export class DynamicRoute {
     return await this.getPresenterRecord()?.declaration()
   }
 
+  private instance: Presenter | undefined
+  async getInstance(httpContext: HttpContext): Promise<any> {
+    const cls = await this.getPresenterClass()
+    if (!cls) return undefined
+    if (this.instance?.constructor === cls) return this.instance
+
+    this.instance = await httpContext.containerResolver.make(cls)
+
+    return this.instance
+  }
+
+  async getAction( httpContext: HttpContext ): Promise<Function | any> {
+    const instance = (await this.getInstance(httpContext))
+      return instance[this.getActionMethodName()]?.bind(instance)
+  }
+
+
   getMetadata() {
     return this.getPresenterRecord()?.metadata
   }
+
+  async isExecutable(httpContext: HttpContext) {
+    return (
+      this.presenterExists() &&
+      typeof await this.getAction(httpContext) === 'function'
+    )
+  }
 }
-
-// Utility: make all properties required recursively
-type Primitive = string | number | boolean | bigint | symbol | null | undefined
-
-type DeepRequired<T> = T extends Primitive | Function | Date | RegExp
-  ? T
-  : T extends ReadonlyArray<infer U>
-    ? ReadonlyArray<DeepRequired<U>>
-    : T extends Array<infer U>
-      ? Array<DeepRequired<U>>
-      : { [K in keyof T]-?: DeepRequired<T[K]> }
-
-// Manifest method metadata with all nested properties required
-type ManifestMethodMetadata = DeepRequired<MethodMetadata>
