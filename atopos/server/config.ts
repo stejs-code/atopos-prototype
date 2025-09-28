@@ -49,6 +49,7 @@ export type AtoposUserConfig = {
 export interface NamedRoute {
   presenterId: string
   action: string
+  params: Record<string, any>
 }
 
 export type AtoposConfig = {
@@ -83,10 +84,12 @@ export function defineConfig(config: AtoposUserConfig): AtoposConfig {
 
 export function namedRoute<T extends typeof Presenter>(
   presenter: T,
-  action: keyof InstanceType<T>
+  action: keyof InstanceType<T>,
+  params?: Record<string, any>
 ) {
   return {
     presenterId: Presenter.parsePresenterId(presenter.name),
     action: Presenter.parseActionId(action.toString()),
+    params: params ?? {}
   }
 }

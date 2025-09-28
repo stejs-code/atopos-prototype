@@ -2,6 +2,7 @@ import type { ApplicationService } from '@adonisjs/core/types'
 import { AtoposConfig } from '../server/config.js'
 import router from '@adonisjs/core/services/router'
 import { DynamicRoute } from '#middleware/dynamic_router_middleware'
+import { lowerFirst } from 'lodash-es'
 
 export default class AtoposProvider {
   constructor(protected app: ApplicationService) {}
@@ -32,11 +33,16 @@ export default class AtoposProvider {
     const config = this.app.config.get<AtoposConfig>('atopos.atopos')
 
     for (const [key, value] of Object.entries(config.router)) {
-      router.any(key, async (ctx) => {
-        const route = new DynamicRoute(value.presenterId, value.action, ctx.params)
+      router
+        .any(key, async (ctx) => {
+          const route = new DynamicRoute(value.presenterId, value.action, {
+            ...ctx.params,
+            ...value.params,
+          })
 
-        await route.execute(ctx)
-      })
+          await route.execute(ctx)
+        })
+        .as(`${value.presenterId}:${lowerFirst(value.action)}`)
     }
   }
 

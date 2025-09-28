@@ -11,5 +11,7 @@ export const atopos = defineConfig({
 
   router: {
     '/user/:id/detail': namedRoute(UserPresenter, "actionDetail"),
+    // '/': namedRoute(UserPresenter, "actionDetail"),
+    '/user/:id/edit': namedRoute(UserPresenter, "actionEdit"),
   },
 })

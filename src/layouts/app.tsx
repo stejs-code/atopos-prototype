@@ -1,8 +1,9 @@
-import { component$, Slot } from '@qwik.dev/core'
+import { component$, Slot, useSignal } from '@qwik.dev/core'
 
 import { Link } from '../../atopos/client/link'
 
 export default component$(() => {
+  const countSig = useSignal(1)
   return (
     <div class="container">
       <div class="navbar bg-base-100 shadow-sm">
@@ -30,31 +31,38 @@ export default component$(() => {
               class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
             >
               <li>
-                <Link href="/user/detail?id=1">detail</Link>
+                <Link href="/user/detail?id=125">
+                  detail
+                </Link>
               </li>
               <li>
                 <Link href="/user/edit?id=1">edit</Link>
               </li>
-
             </ul>
           </div>
-          <Link class="btn btn-ghost text-xl" href={"/"}>daisyUI</Link>
+          <Link class="btn btn-ghost text-xl" href={'/'}>
+            daisyUI
+          </Link>
         </div>
         <div class="navbar-center hidden lg:flex">
           <ul class="menu menu-horizontal px-1">
             <li>
-              <Link href="/user/detail?id=1">detail</Link>
+              <Link n:href={'User:detail'} n:params={{ id: 4 }}>
+                detail
+              </Link>
             </li>
             <li>
-              <Link href="/user/edit?id=1">edit</Link>
+              <Link n:href={'User:edit'} n:params={{ id: 4 }}>
+                edit
+              </Link>
             </li>
           </ul>
         </div>
-        <div class="navbar-end">
-        </div>
+        <div class="navbar-end"></div>
       </div>
-
-      welcome to the app layout page.
+      <button class={'btn btn-primary'} onClick$={() => countSig.value++}>
+        {countSig.value}
+      </button>
       <Slot />
       endofapp
     </div>

@@ -6,6 +6,7 @@ import { StreamWriter } from '@qwik.dev/core/internal'
 import app from '@adonisjs/core/services/app'
 import { QwikDevToolsService } from '#services/qwik/qwik_dev_tools_service'
 import { ModuleRunner } from 'vite/module-runner'
+import router from '@adonisjs/core/services/router'
 
 export class QwikEngineService {
   async renderToStream(data: AdoQwik.RenderData, stream: StreamWriter) {
@@ -16,6 +17,7 @@ export class QwikEngineService {
       base: this.getBase(),
       serverData: {
         ...data,
+        router: router,
         location: {
           x: 'a',
         },
