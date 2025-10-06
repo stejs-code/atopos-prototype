@@ -8,8 +8,8 @@ export default component$(() => {
     <div class="container">
       <div class="navbar bg-base-100 shadow-sm">
         <div class="navbar-start">
-          <div class="dropdown">
-            <div tabIndex={0} role="button" class="btn btn-ghost lg:hidden">
+          <div class="dropdown text-accent-content/30 bg-accent-content/10 bg-accent text-accent-content/10 btn-dash">
+            <div tabIndex={0} role="button" class="btn btn-ghost lg:hidden group-focus-visible text-red-500 shadow-base-100">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-5 w-5"
@@ -28,7 +28,7 @@ export default component$(() => {
             </div>
             <ul
               tabIndex={0}
-              class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+              class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow t tex"
             >
               <li>
                 <Link href="/user/detail?id=125">
