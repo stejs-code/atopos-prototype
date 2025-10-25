@@ -33,7 +33,7 @@ export class QwikDevToolsService {
   protected get devToolsHtml() {
     if (!this._devToolsHtml) {
       const readDev = (file: string) => {
-        return fs.readFileSync(app.makePath(`resources/dev/${file}`), 'utf8')
+        return fs.readFileSync(app.makePath(`resources/dev/${file}`), 'utf-8')
       }
 
       this._devToolsHtml = {

@@ -95,7 +95,7 @@ export class DynamicRoute {
     const tpl = instance.getTemplate()
     // TODO add, maybe, something
     if (typeof actionResponse === 'string') {
-      response.header('Content-Type', 'text/plain')
+      response.header('Content-Type', 'text/html; charset=utf-8')
       response.send(actionResponse)
     } else if (actionResponse instanceof Response) {
       response.send(actionResponse)
@@ -103,6 +103,8 @@ export class DynamicRoute {
       const isQData = 'q-data' in httpContext.request.qs()
 
       if (!isQData) {
+        response.header('Content-Type', 'text/html; charset=utf-8')
+        response.header('Transfer-Encoding', 'chunked')
         const pass = new PassThrough()
 
         response.stream(pass)
@@ -116,7 +118,7 @@ export class DynamicRoute {
           'X-Prefetch-Modules',
           JSON.stringify([templateInfo.view.modulePath, templateInfo.layout.modulePath])
         )
-        response.header('Content-Type', 'text/plain; charset=utf-8')
+        response.header('Content-Type', 'application/json; charset=utf-8')
         response.header('Cache-Control', 'no-cache')
         response.header('X-Accel-Buffering', 'no') // helps with Nginx
         response.header('Transfer-Encoding', 'chunked')

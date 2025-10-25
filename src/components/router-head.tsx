@@ -7,8 +7,9 @@ export const RouterHead = component$(() => {
 
   return (
     <>
+      <meta charset="utf-8" />
       <title>{head.title}</title>
-      <link href={css} rel="stylesheet"/>
+      <link href={css} rel="stylesheet" />
 
       {head.elements.map((el, i) => {
         const { props } = el as any
