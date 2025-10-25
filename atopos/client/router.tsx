@@ -11,7 +11,7 @@ import {
   useServerData,
   useStore,
   useTask$,
-} from '@qwik.dev/core'
+} from '@builder.io/qwik'
 import type { QData } from '#classes/qwik/qwik_template'
 import { getComponentQrl } from './utils'
 import { useNavigate } from './use-navigate'

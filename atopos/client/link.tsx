@@ -7,7 +7,7 @@ import {
   useComputed$,
   useServerData,
   useSignal,
-} from '@qwik.dev/core'
+} from '@builder.io/qwik'
 import { useNavigate } from './use-navigate'
 import type { HttpRouterService } from '@adonisjs/core/types'
 

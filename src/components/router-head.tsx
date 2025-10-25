@@ -1,4 +1,4 @@
-import { component$ } from '@qwik.dev/core'
+import { component$ } from '@builder.io/qwik'
 import { useHead } from '../../atopos/client/router.js'
 import css from '../index.css?url'
 

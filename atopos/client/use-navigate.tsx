@@ -1,4 +1,4 @@
-import { $, noSerialize, useContext } from '@qwik.dev/core'
+import { $, noSerialize, useContext } from '@builder.io/qwik'
 import { renderRoute, routerContext } from './router'
 
 export type NavigateOptions = {

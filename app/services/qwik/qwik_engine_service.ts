@@ -1,12 +1,14 @@
 import { AdoQwik } from '#services/qwik/index'
 import vite from '@adonisjs/vite/services/main'
-import { RenderResult, RenderToStreamOptions } from '@qwik.dev/core/server'
+import { RenderResult, RenderToStreamOptions } from '@builder.io/qwik/server'
 import { err, ok } from 'neverthrow'
-import { StreamWriter } from '@qwik.dev/core/internal'
+import { StreamWriter } from '@builder.io/qwik'
 import app from '@adonisjs/core/services/app'
 import { QwikDevToolsService } from '#services/qwik/qwik_dev_tools_service'
 import { ModuleRunner } from 'vite/module-runner'
 import router from '@adonisjs/core/services/router'
+import { ServerQwikManifest, symbolMapper } from '@builder.io/qwik/optimizer'
+import { join } from 'node:path'
 
 export class QwikEngineService {
   async renderToStream(data: AdoQwik.RenderData, stream: StreamWriter) {
@@ -15,6 +17,8 @@ export class QwikEngineService {
     const opts: RenderToStreamOptions = {
       stream: stream,
       base: this.getBase(),
+      symbolMapper: app.inDev ? symbolMapper : undefined,
+      manifest: app.inDev ? this.getClientManifest() : undefined,
       serverData: {
         ...data,
         router: router,
@@ -23,6 +27,17 @@ export class QwikEngineService {
         },
       },
     }
+
+    // const renderOpts: RenderToStreamOptions = {
+    //   debug: true,
+    //   locale: serverData.locale,
+    //   stream: res,
+    //   snapshot: !isClientDevOnly,
+    //   manifest: isClientDevOnly ? undefined : manifest,
+    //   symbolMapper: isClientDevOnly ? undefined : symbolMapper,
+    //   serverData,
+    //   containerAttributes: { ...serverData.containerAttributes },
+    // }
 
     const result = await this.runRenderFunction(module.default, opts)
 
@@ -102,8 +117,113 @@ export class QwikEngineService {
     }
     return this.runner
   }
+
+  cssImportedByCSS = new Set<string>()
+
+  getClientManifest() {
+
+    const manifest: ServerQwikManifest = {
+      manifestHash: '',
+      mapping: {},
+      injections: [],
+    }
+
+    const server = vite.getDevServer()
+
+    if (!server) return manifest
+
+    const added = new Set()
+    const CSS_EXTENSIONS = ['.css', '.scss', '.sass', '.less', '.styl', '.stylus']
+    const JS_EXTENSIONS = /\.[mc]?[tj]sx?$/
+
+    Array.from(server.moduleGraph.fileToModulesMap.entries()).forEach((entry) => {
+      entry[1].forEach((v) => {
+        const segment = v.info?.meta?.segment
+        let url = v.url
+        if (v.lastHMRTimestamp) {
+          url += `?t=${v.lastHMRTimestamp}`
+        }
+        if (segment) {
+          manifest.mapping[segment.name] = relativeURL(url, join(app.appRoot.href, 'src'))
+        }
+
+        const { pathId, query } = parseId(v.url)
+
+        if (query === '' && CSS_EXTENSIONS.some((ext) => pathId.endsWith(ext))) {
+          const isEntryCSS = v.importers.size === 0
+          const hasCSSImporter = Array.from(v.importers).some((importer) => {
+            const importerPath = (importer as typeof v).url || (importer as typeof v).file
+
+            const isCSS = importerPath && CSS_EXTENSIONS.some((ext) => importerPath.endsWith(ext))
+
+            if (isCSS && v.url) {
+              this.cssImportedByCSS.add(v.url)
+            }
+
+            return isCSS
+          })
+
+          const hasJSImporter = Array.from(v.importers).some((importer) => {
+            const importerPath = (importer as typeof v).url || (importer as typeof v).file
+            return importerPath && JS_EXTENSIONS.test(importerPath)
+          })
+
+          if (
+            (isEntryCSS || hasJSImporter) &&
+            !hasCSSImporter &&
+            !this.cssImportedByCSS.has(v.url) &&
+            !added.has(v.url)
+          ) {
+            added.add(v.url)
+            manifest.injections!.push({
+              tag: 'link',
+              location: 'head',
+              attributes: {
+                rel: 'stylesheet',
+                href: `${this.getBase()}${url.slice(1)}`,
+              },
+            })
+          }
+        }
+      })
+    })
+
+    manifest.manifestHash = hashCode(JSON.stringify(manifest))
+
+    return manifest
+  }
 }
 
 app.container.singleton(QwikEngineService, () => {
   return new QwikEngineService()
 })
+
+function relativeURL(url: string, base: string) {
+  if (url.startsWith(base)) {
+    url = url.slice(base.length)
+    if (!url.startsWith('/')) {
+      url = '/' + url
+    }
+  }
+  return url
+}
+
+export function parseId(originalId: string) {
+  const [pathId, query] = originalId.split('?')
+  const queryStr = query || ''
+  return {
+    originalId,
+    pathId,
+    query: queryStr ? `?${query}` : '',
+    params: new URLSearchParams(queryStr),
+  }
+}
+
+export const hashCode = (text: string, hash: number = 0) => {
+  for (let i = 0; i < text.length; i++) {
+    const chr = text.charCodeAt(i);
+    hash = (hash << 5) - hash + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return Number(Math.abs(hash)).toString(36);
+};

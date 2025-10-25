@@ -1,5 +1,5 @@
 import { QwikLoader } from '../vite/loaders-plugin/qwik_loader'
-import { QRL, useContext } from '@qwik.dev/core'
+import { QRL, useContext } from '@builder.io/qwik'
 import { routerContext } from './router'
 
 export function useLoader<T extends typeof QwikLoader>(

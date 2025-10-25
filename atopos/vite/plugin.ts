@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import { PluginOption } from 'vite'
 import registerEntryPoints from './register-entry-points'
-import { qwikVite } from '@qwik.dev/core/optimizer'
+import { qwikVite } from '@builder.io/qwik/optimizer'
 import qwikLoadersPlugin from './loaders-plugin'
 import { atopos } from '#config/atopos.js'
 

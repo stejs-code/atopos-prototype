@@ -1,6 +1,6 @@
 import { inject } from '@adonisjs/core'
 import { QwikEngineService } from '#services/qwik/qwik_engine_service'
-import { StreamWriter } from '@qwik.dev/core/internal'
+import { StreamWriter } from '@builder.io/qwik/internal'
 import { InferLoaderParameters, QwikLoader } from '../../../atopos/vite/loaders-plugin/qwik_loader'
 import QwikLocationLoader from './loaders/qwik_location_loader.js'
 import { HttpContext } from '@adonisjs/core/http'
