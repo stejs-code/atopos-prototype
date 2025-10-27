@@ -1,12 +1,13 @@
 import { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
 import { strUtils } from '#services/util/string_util_service'
-import { camelCase, upperFirst } from 'lodash-es'
+import { camelCase } from 'lodash-es'
 import { z } from 'zod/v4'
 import { Presenter } from '../../atopos/server/presenter.js'
 import { PassThrough } from 'node:stream'
-import { manifest, MethodMetadata } from '../../atopos/shared/manifest/manifest.js'
+import { MethodMetadata } from '../../atopos/shared/manifest/manifest.js'
 import router from '@adonisjs/core/services/router'
+import { ActionID, PresenterID } from '../../atopos/shared/utils.js'
 
 export default class DynamicRouterMiddleware {
   async handle(ctx: HttpContext, next: NextFn) {
@@ -16,7 +17,7 @@ export default class DynamicRouterMiddleware {
 
     const route = await this.findRoute(ctx.request)
 
-    if (await route.isExecutable(ctx)) {
+    if (await route.isExecutable()) {
       await route.execute(ctx)
     } else {
       await next()
@@ -44,48 +45,48 @@ export default class DynamicRouterMiddleware {
     const action = camelCase(unparsedAction)
     return new DynamicRoute(presenterName, action, {})
   }
-
-  parseActionParameters(method: any) {
-    const params = strUtils.getParamNames(method)
-    console.log(params)
-  }
 }
 
 export class DynamicRoute {
+  public presenterID: PresenterID
+  public actionID: ActionID
+
   constructor(
-    public presenterId: string, // e.g. "User"
-    public action: string, // e.g. "detail"
+    presenterID: string | PresenterID, // e.g. "User"
+    action: string, // e.g. "detail"
     public params: Record<string, number | string | true>
   ) {
-    this.presenterId = Presenter.parsePresenterId(presenterId)
-    this.action = Presenter.parseActionId(action)
+    this.presenterID = new PresenterID(presenterID)
+    this.actionID = new ActionID(action, this.presenterID)
+    console.log(`${this.presenterID}`, this.actionID)
   }
 
   async execute(httpContext: HttpContext): Promise<void> {
     const { response } = httpContext
 
-    if (!this.presenterExists()) {
-      httpContext.response.send(`Presenter ${this.presenterId} not found`)
+    if (!this.presenterID.exists()) {
+      httpContext.response.send(`Presenter ${this.presenterID} not found`)
       return
     }
 
-    const instance: Presenter = await this.getInstance(httpContext)
+    const instance: Presenter = await this.presenterID.getInstance(httpContext)
 
-    const acName = this.getActionMethodName()
-    const action = await this.getAction(httpContext)
+    const action = await this.actionID.getFunction(httpContext)
 
     if (!action) {
-      throw new Error(`No method named ${acName}`)
+      throw new Error(`No method named ${this.actionID}`)
     }
 
-    const methodMeta = this.getMetadata()?.methods.find((method) => method.name === acName)
+    const methodMeta = this.actionID.getMetadata()
 
     if (!methodMeta) {
-      throw new Error(`No metadata found for method ${this.presenterId}.${acName}`)
+      throw new Error(`No metadata found for method ${this.presenterID}:${this.actionID}`)
     }
 
     if (methodMeta.purpose !== 'action') {
-      throw new Error(`Metadata found for method named ${acName} don't have "action" purpose`)
+      throw new Error(
+        `Metadata found for method named ${this.actionID} don't have "action" purpose`
+      )
     }
 
     const args = this.deriveArgumentsFromRequest(httpContext.request, methodMeta)
@@ -172,51 +173,7 @@ export class DynamicRoute {
     })
   }
 
-  getActionMethodName(): string {
-    return 'action' + upperFirst(this.action)
-  }
-
-  getPresenterName() {
-    return this.presenterId + 'Presenter'
-  }
-
-  presenterExists() {
-    return manifest.presenters.has(this.presenterId)
-  }
-
-  getPresenterRecord() {
-    return manifest.getPresenter(this.presenterId)
-  }
-
-  async getPresenterClass(): Promise<any> {
-    return await this.getPresenterRecord()?.declaration()
-  }
-
-  private instance: Presenter | undefined
-  async getInstance(httpContext: HttpContext): Promise<any> {
-    const cls = await this.getPresenterClass()
-    if (!cls) return undefined
-    if (this.instance?.constructor === cls) return this.instance
-
-    this.instance = await httpContext.containerResolver.make(cls)
-
-    return this.instance
-  }
-
-  async getAction( httpContext: HttpContext ): Promise<Function | any> {
-    const instance = (await this.getInstance(httpContext))
-      return instance[this.getActionMethodName()]?.bind(instance)
-  }
-
-
-  getMetadata() {
-    return this.getPresenterRecord()?.metadata
-  }
-
-  async isExecutable(httpContext: HttpContext) {
-    return (
-      this.presenterExists() &&
-      typeof await this.getAction(httpContext) === 'function'
-    )
+  async isExecutable() {
+    return this.actionID.exists()
   }
 }

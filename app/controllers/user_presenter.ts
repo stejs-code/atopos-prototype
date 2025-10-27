@@ -25,3 +25,5 @@ export default class UserPresenter extends Presenter {
     this.tpl.setFile('b-tpl')
   }
 }
+
+

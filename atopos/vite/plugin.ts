@@ -12,6 +12,7 @@ export default function atoposVite(): PluginOption {
       dirs: atopos.serverLoadedViteDir,
     }),
     qwikVite({
+      csr: false,
       devSsrServer: false,
       ssr: {
         manifestInput: loadQwikManifest(),
@@ -24,6 +25,6 @@ function loadQwikManifest() {
   try {
     return JSON.parse(fs.readFileSync('public/dist/q-manifest.json').toString('utf-8'))
   } catch (e) {
-    return {}
+    return undefined
   }
 }

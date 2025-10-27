@@ -41,5 +41,10 @@ new Ignitor(APP_ROOT, { importer: IMPORTER })
   .start()
   .catch((error) => {
     process.exitCode = 1
+
     prettyPrintError(error)
   })
+  .then(async () => {
+    console.log(2, import.meta.hot?.boundary)
+  })
+

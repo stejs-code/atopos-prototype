@@ -2,7 +2,6 @@ import fs from 'node:fs'
 import app from '@adonisjs/core/services/app'
 import { join } from 'node:path'
 import { AtoposConfig } from '../../server/config.js'
-import { Presenter } from '../../server/presenter.js'
 
 export class Manifest {
   public readonly presenters: Map<string, PresenterRecord> = new Map()
@@ -18,24 +17,27 @@ export class Manifest {
     for (const [k, pres] of Object.entries(json.presenters)) {
       manifest.presenters.set(k, {
         metadata: pres.metadata,
-        declaration: this.importDefaultClosure(pres.importPath),
+        declaration: this.createImportDefaultClosure(pres.importPath),
       })
     }
 
     return manifest
   }
 
-  static importDefaultClosure(path: string) {
-    return () => import(path).then((m) => m.default)
+  static createImportDefaultClosure(path: string) {
+    return async () => {
+      console.log(new Error().stack, import.meta.hot?.boundary)
+      return await import(path, import.meta.hot?.boundary).then((m) => m.default)
+    }
   }
 
   public getPresenter(presenterId: string): PresenterRecord | undefined {
-    return this.presenters.get(Presenter.parsePresenterId(presenterId))
+    return this.presenters.get(presenterId)
   }
 }
 
 app.container.singleton(Manifest, async () => {
-  if (app.inProduction){
+  if (app.inProduction) {
     return await Manifest.makeProductionManifest()
   }
 

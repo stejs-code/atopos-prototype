@@ -51,7 +51,7 @@ export class PresenterManifestBuilder {
       const importPath = `${this.presenterImportPrefix}${pres.relativeFilePath.replace('.ts', '')}`
       manifest.presenters.set(Presenter.parsePresenterId(pres.className), {
         metadata: pres.metadata!,
-        declaration: Manifest.importDefaultClosure(importPath),
+        declaration: Manifest.createImportDefaultClosure(importPath),
       })
     }
   }

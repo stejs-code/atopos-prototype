@@ -105,23 +105,46 @@ export class QwikEngineService {
   }
 
   private runner?: ModuleRunner
+  private viteRestartHandler?: () => void
   private async getRunner() {
-    if (!this.runner) {
-      this.runner = await vite.createModuleRunner()
-      // optional: clean up on shutdown
-      process.once('exit', () => this.runner?.close?.())
-      process.once('SIGINT', () => {
+    if (this.runner) return this.runner
+
+    this.runner = await vite.createModuleRunner()
+
+    const cleanup = () => {
+      try {
         this.runner?.close?.()
-        process.exit()
-      })
+      } catch {}
+      this.runner = undefined
     }
+
+    process.once('exit', cleanup)
+    process.once('SIGINT', () => {
+      cleanup()
+      process.exit()
+    })
+
+    const server = vite.getDevServer?.()
+    if (server && !this.viteRestartHandler) {
+      this.viteRestartHandler = () => {
+        cleanup()
+      }
+
+      const originalRestart = server.restart
+      server.restart = (...args) => {
+        if (this.viteRestartHandler) {
+          this.viteRestartHandler()
+        }
+        return originalRestart.bind(server)(...args)
+      }
+    }
+
     return this.runner
   }
 
   cssImportedByCSS = new Set<string>()
 
   getClientManifest() {
-
     const manifest: ServerQwikManifest = {
       manifestHash: '',
       mapping: {},
@@ -221,9 +244,9 @@ export function parseId(originalId: string) {
 
 export const hashCode = (text: string, hash: number = 0) => {
   for (let i = 0; i < text.length; i++) {
-    const chr = text.charCodeAt(i);
-    hash = (hash << 5) - hash + chr;
-    hash |= 0; // Convert to 32bit integer
+    const chr = text.charCodeAt(i)
+    hash = (hash << 5) - hash + chr
+    hash |= 0 // Convert to 32bit integer
   }
-  return Number(Math.abs(hash)).toString(36);
-};
+  return Number(Math.abs(hash)).toString(36)
+}

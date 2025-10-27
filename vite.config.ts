@@ -6,7 +6,7 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig({
   base: '/dist/',
-
+  mode: 'ssr',
   publicDir: false,
   build: {
     copyPublicDir: false,
