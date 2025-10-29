@@ -1,8 +1,8 @@
 import type { ApplicationService } from '@adonisjs/core/types'
 import { AtoposConfig } from '../server/config.js'
 import router from '@adonisjs/core/services/router'
-import { DynamicRoute } from '#middleware/dynamic_router_middleware'
 import { lowerFirst } from 'lodash-es'
+import { Mosaic } from '../server/mosaic.js'
 
 export default class AtoposProvider {
   constructor(protected app: ApplicationService) {}
@@ -35,7 +35,7 @@ export default class AtoposProvider {
     for (const [key, value] of Object.entries(config.router)) {
       router
         .any(key, async (ctx) => {
-          const route = new DynamicRoute(value.presenterId, value.action, {
+          const route = new Mosaic(value.presenterId, value.action, {
             ...ctx.params,
             ...value.params,
           })

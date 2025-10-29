@@ -3,7 +3,7 @@ export type FormProps = Omit<PropsOf<'form'>, 'action'> & {
   action: ':'
 }
 export const Form = component$<FormProps>((props) => {
-  const { ...rest, action } = props
+  const { action, ...rest } = props
 
   return <form action="" preventdefault:submit {...rest}></form>
 })

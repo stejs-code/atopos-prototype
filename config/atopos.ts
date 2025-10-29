@@ -1,4 +1,4 @@
-import { defineConfig, namedRoute } from '../atopos/server/config.js'
+import { defineConfig } from '../atopos/server/config.js'
 
 export const atopos = defineConfig({
   // atoposManifestPath: './app/presenter-manifest.ts',

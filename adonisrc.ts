@@ -45,7 +45,8 @@ export default defineConfig({
     },
     () => import('@adonisjs/vite/vite_provider'),
     () => import('@adonisjs/static/static_provider'),
-    () => import('./atopos/providers/atopos_provider.js')
+    () => import('./atopos/providers/atopos_provider.js'),
+    () => import('#providers/app_provider')
   ],
 
   /*

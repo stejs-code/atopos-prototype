@@ -10,7 +10,7 @@
 import router from '@adonisjs/core/services/router'
 import app from '@adonisjs/core/services/app'
 
-router.get("/test", () => "ahoj")
+router.get('/test', () => 'ahoj')
 router.get('/dump-viewer', async () => {
   if (app.inProduction) throw new Error('only in dev')
   const { dumpViewer } = await import('@hot-hook/dump-viewer')
@@ -18,3 +18,12 @@ router.get('/dump-viewer', async () => {
   // reply.header('Content-Type', 'text/html; charset=utf-8')
   return dumpViewer()
 })
+const gr = router
+  .group(() => {
+    router.get('/dump-viewer', () => 'ahoj')
+
+  })
+  .prefix('/cs')
+
+console.log(gr.getPrefix())
+

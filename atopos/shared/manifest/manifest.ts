@@ -26,8 +26,8 @@ export class Manifest {
 
   static createImportDefaultClosure(path: string) {
     return async () => {
-      console.log(new Error().stack, import.meta.hot?.boundary)
-      return await import(path, import.meta.hot?.boundary).then((m) => m.default)
+      // TODO: Presenter files should be marked as boundary files, here is the crucial import
+      return await import(path).then((m) => m.default)
     }
   }
 
