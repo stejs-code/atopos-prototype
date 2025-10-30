@@ -43,7 +43,6 @@ export default defineConfig({
       file: () => import('@adonisjs/core/providers/repl_provider'),
       environment: ['repl', 'test'],
     },
-    () => import('@adonisjs/vite/vite_provider')
   ],
 
   /*
@@ -80,11 +79,4 @@ export default defineConfig({
     ],
     forceExit: false,
   },
-  metaFiles: [{
-    pattern: 'public/**',
-    reloadServer: false,
-  }],
-  hooks: {
-    onBuildStarting: [() => import('@adonisjs/vite/build_hook')]
-  }
 })
