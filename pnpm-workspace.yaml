@@ -1,0 +1,24 @@
+packages:
+  - packages/*
+
+'@napi-rs/wasm-runtime': 1.0.5
+
+autoInstallPeers: false
+
+engineStrict: true
+
+ignoredBuiltDependencies:
+  - '@swc/core'
+  - esbuild
+
+onlyBuiltDependencies: null
+
+overrides: null
+
+patchedDependencies: null
+
+shellEmulator: true
+
+typescript: 5.4.5
+
+vfile: 6.0.3

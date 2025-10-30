@@ -1,0 +1,60 @@
+{
+  "name": "@atopos/qwik-engine",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": "./dist/src/index.js",
+    "./build_hook": "./dist/hooks/build_vite_server.js",
+    "./cleanup_hook": "./dist/hooks/cleanup_build.js"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "npm run build.qwik && npm run build.tsdown",
+    "build.tsdown": "npx tsdown",
+    "build.qwik": "npx vite build --mode lib ",
+
+    "dev": "concurrently 'npm run dev.tsdown' 'npm run dev.qwik'" ,
+    "dev.tsdown": "npx tsdown --watch",
+    "dev.qwik": "npx vite build --mode lib --watch",
+
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@adonisjs/assembler": "^7.8.2",
+    "@adonisjs/eslint-config": "^2.0.0",
+    "@adonisjs/prettier-config": "^1.4.4",
+    "@adonisjs/tsconfig": "^1.4.0",
+    "@japa/assert": "^4.0.1",
+    "@japa/plugin-adonisjs": "^4.0.0",
+    "@japa/runner": "^4.2.0",
+    "@swc/core": "1.11.24",
+    "@types/node": "^22.15.18",
+    "concurrently": "^9.2.1",
+    "eslint": "^9.26.0",
+    "pino-pretty": "^13.0.0",
+    "prettier": "^3.5.3",
+    "ts-node-maintained": "^10.9.5",
+    "tsdown": "^0.15.12",
+    "typescript": "~5.8"
+  },
+  "dependencies": {
+    "@adonisjs/core": "^6.18.0",
+    "@adonisjs/vite": "5.0.0-next.0",
+    "@builder.io/qwik": "1.17.0",
+    "magic-string": "^0.30.21",
+    "optional": "^0.1.4",
+    "oxc-parser": "^0.89.0",
+    "reflect-metadata": "^0.2.2",
+    "rollup": "^4.52.5",
+    "vite": "^7.1.12"
+  },
+  "eslintConfig": {
+    "extends": "@adonisjs/eslint-config/app"
+  },
+  "prettier": "@adonisjs/prettier-config"
+}

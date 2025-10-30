@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="7c95ec98-ecc8-41bd-b6e0-d7289faf0f6c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/prettier.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/core/.editorconfig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/core/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/core/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/core/eslint.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/core/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/core/src/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/core/tsconfig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/core/tsdown.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/example-package/.editorconfig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/example-package/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/example-package/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/example-package/bin/test.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/example-package/eslint.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/example-package/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/example-package/src/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/example-package/tests/bootstrap.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/example-package/tsconfig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/.editorconfig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/bin/test.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/eslint.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/hooks/emit_manifest.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/src/class/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/src/class/mosaic.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/src/class/presenter.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/src/config/config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/src/config/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/src/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/src/manifest/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/src/manifest/manifest.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/src/manifest/manifest_builder.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/src/manifest/types.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/src/utils/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/src/utils/name_convention.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/src/utils/utils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/tests/bootstrap.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/presenter/tsconfig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/.editorconfig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/.env.example" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/ace.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/adonisrc.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/app/classes/qwik/loaders/qwik_location_loader.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/app/controllers/user_presenter.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/app/exceptions/handler.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/app/extensions.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/app/middleware/container_bindings_middleware.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/app/middleware/dynamic_router_middleware.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/bin/console.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/bin/server.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/bin/test.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/config/app.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/config/atopos.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/config/bodyparser.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/config/hash.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/config/logger.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/config/static.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/config/vite.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/eslint.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/package-lock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/providers/app_provider.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/public/robots.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/src/components/router-head.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/src/entry.ssr.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/src/index.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/src/layouts/app.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/src/layouts/blank.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/src/root.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/src/views/a-tpl.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/src/views/b-tpl.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/src/views/error-500.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/start/env.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/start/kernel.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/start/routes.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/tests/bootstrap.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/tsconfig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/types.d.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/probe/vite.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/.editorconfig" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/eslint.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/hooks/build_vite_server.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/hooks/cleanup_build.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/resources/dev/click-to-component.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/resources/dev/error-host.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/resources/dev/image-size-runtime.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/resources/dev/perf-warning.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/app/document_head.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/app/qwik_dev_tools_service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/app/qwik_engine_service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/app/qwik_template.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/app/vite_error.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/client/form.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/client/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/client/link.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/client/router.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/client/use-navigate.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/client/utils.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/vite/loaders-plugin/core/ast_walker.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/vite/loaders-plugin/core/call_transformer.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/vite/loaders-plugin/core/import_registry.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/vite/loaders-plugin/core/import_rewriter.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/vite/loaders-plugin/core/parser_facade.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/vite/loaders-plugin/core/qwik_loaders_transform.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/vite/loaders-plugin/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/vite/loaders-plugin/qwik_loader.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/vite/loaders-plugin/types.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/vite/manifest-plugin/manifest_plugin.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/vite/plugin.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/src/vite/register_entry_points.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/tsconfig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/tsdown.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/qwik-engine/vite.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pnpm-workspace.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.editorconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ace.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/adonisrc.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/classes/qwik/document_head.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/classes/qwik/loaders/qwik_location_loader.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/classes/qwik/qwik_template.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/user_presenter.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/exceptions/handler.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/extensions.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/middleware/container_bindings_middleware.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/middleware/dynamic_router_middleware.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/qwik/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/qwik/qwik_dev_tools_service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/qwik/qwik_engine_service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/util/string_util_service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/vite-error.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/client/form.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/client/link.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/client/router.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/client/use-navigate.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/client/utils.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/hooks/after_build_hook.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/hooks/build_hook.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/providers/atopos_provider.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/server/config.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/server/mosaic.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/server/presenter.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/shared/manifest/manifest-builder.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/shared/manifest/manifest.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/shared/utils.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/vite/loaders-plugin/core/AstWalker.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/vite/loaders-plugin/core/CallTransformer.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/vite/loaders-plugin/core/ImportRegistry.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/vite/loaders-plugin/core/ImportRewriter.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/vite/loaders-plugin/core/ParserFacade.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/vite/loaders-plugin/core/QwikLoadersTransform.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/vite/loaders-plugin/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/vite/loaders-plugin/qwik_loader.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/vite/loaders-plugin/types.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/vite/manifest-plugin/manifest-plugin.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/vite/plugin.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/atopos/vite/register-entry-points.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/console.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/server.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/test.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/app.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/atopos.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/bodyparser.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/hash.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/logger.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/static.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/vite.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/proposals/routing.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/proposals/routing.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eslint.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/providers/app_provider.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/robots.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/dev/click-to-component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/dev/error-host.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/dev/image-size-runtime.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/dev/perf-warning.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/router-head.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/entry.ssr.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layouts/app.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layouts/blank.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/root.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/a-tpl.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/b-tpl.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/error-500.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/start/env.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/start/kernel.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/start/routes.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/bootstrap.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/types.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite.config.ts" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;stejs-code&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/stejs-code/atopos-prototype.git&quot;,
+    &quot;accountId&quot;: &quot;89871e8d-8028-4714-a8e4-a263cc169de5&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="34nBXbVb9GcVyEw5BozjKNum4E4" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/monorepo-setup&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/stejs/Work/atopos&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/stejs/Work/atopos/packages/presenter/node_modules/prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-WS-252.27397.92" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="7c95ec98-ecc8-41bd-b6e0-d7289faf0f6c" name="Changes" comment="" />
+      <created>1761839495953</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1761839495953</updated>
+      <workItem from="1761839497002" duration="139000" />
+      <workItem from="1761841377089" duration="378000" />
+      <workItem from="1761841884951" duration="629000" />
+      <workItem from="1761844004782" duration="2554000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

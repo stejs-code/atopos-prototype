@@ -1,0 +1,37 @@
+{
+  "name": "@atopos/core",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "types": "./dist/src/index.d.ts",
+  "main": "./dist/src/index.js",
+  "exports": {
+    ".": "./dist/src/index.js"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "npx tsdown",
+    "dev": "npx tsdown --watch",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@adonisjs/eslint-config": "^2.0.0",
+    "@adonisjs/prettier-config": "^1.4.4",
+    "@adonisjs/tsconfig": "^1.4.0",
+    "@types/node": "^22.15.18",
+    "eslint": "^9.26.0",
+    "prettier": "^3.5.3",
+    "typescript": "~5.8"
+  },
+  "dependencies": {
+    "@adonisjs/core": "^6.18.0",
+    "reflect-metadata": "^0.2.2",
+    "tsdown": "^0.15.12"
+  },
+  "eslintConfig": {
+    "extends": "@adonisjs/eslint-config/app"
+  },
+  "prettier": "@adonisjs/prettier-config"
+}
