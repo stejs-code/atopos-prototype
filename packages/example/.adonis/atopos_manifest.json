@@ -1,0 +1,32 @@
+{
+  "presenters": {
+    "User": {
+      "metadata": {
+        "fileName": "user_presenter",
+        "className": "UserPresenter",
+        "methods": [
+          {
+            "name": "actionHello",
+            "parameters": [
+              {
+                "name": "id",
+                "type": "Number",
+                "optional": false,
+                "purpose": "parameter"
+              },
+              {
+                "name": "name",
+                "type": "String",
+                "optional": false,
+                "purpose": "parameter"
+                }
+            ],
+            "purpose": "action"
+          }
+        ]
+      },
+      "importPath": "#presenters/user_presenter",
+      "buildHash": "8ea50c48d314403f75dec626b083f605ef8f81ac"
+    }
+  }
+}

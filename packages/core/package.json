@@ -6,7 +6,8 @@
   "types": "./dist/src/index.d.ts",
   "main": "./dist/src/index.js",
   "exports": {
-    ".": "./dist/src/index.js"
+    ".": "./dist/src/index.js",
+    "./provider": "./dist/src/atopos_provider.js"
   },
   "license": "MIT",
   "scripts": {
@@ -20,6 +21,7 @@
     "@adonisjs/eslint-config": "^2.0.0",
     "@adonisjs/prettier-config": "^1.4.4",
     "@adonisjs/tsconfig": "^1.4.0",
+    "@types/lodash-es": "^4.17.12",
     "@types/node": "^22.15.18",
     "eslint": "^9.26.0",
     "prettier": "^3.5.3",
@@ -27,8 +29,13 @@
   },
   "dependencies": {
     "@adonisjs/core": "^6.18.0",
+    "chokidar": "^4.0.3",
+    "lodash-es": "^4.17.21",
     "reflect-metadata": "^0.2.2",
-    "tsdown": "^0.15.12"
+    "route-recognizer": "^0.3.4",
+    "ts-morph": "^27.0.2",
+    "tsdown": "^0.15.12",
+    "zod": "^4.1.12"
   },
   "eslintConfig": {
     "extends": "@adonisjs/eslint-config/app"

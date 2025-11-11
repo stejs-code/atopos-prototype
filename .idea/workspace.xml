@@ -5,26 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7c95ec98-ecc8-41bd-b6e0-d7289faf0f6c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/packages/core/src/config/config.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/core/src/config/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/core/src/config/modules.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/core/src/manifest/builder.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/core/src/manifest/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/core/src/manifest/manifest.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/core/src/manifest/types.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/core/src/presenter/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/core/src/utils/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/example/app/classes/base.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/example/app/classes/base_presenter.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/example/app/presenters/user_presenter.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/example/config/atopos.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/example/config/auth.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/core/routing.md" beforeDir="false" afterPath="$PROJECT_DIR$/packages/core/routing.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/core/src/config/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/core/src/config/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/core/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/core/src/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/example/app/exceptions/handler.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/example/app/middleware/container_bindings_middleware.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/example/bin/console.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/example/bin/server.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/example/bin/test.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/example/config/app.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/example/config/bodyparser.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/example/config/hash.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/example/config/logger.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/example/adonisrc.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/example/adonisrc.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/example/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/example/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/example/start/env.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/example/start/kernel.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/example/start/routes.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/example/tests/bootstrap.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/example/start/kernel.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/example/start/kernel.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/example/start/routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/example/start/routes.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -91,6 +89,8 @@
       <workItem from="1761841377089" duration="378000" />
       <workItem from="1761841884951" duration="629000" />
       <workItem from="1761844004782" duration="4520000" />
+      <workItem from="1761905821117" duration="1543000" />
+      <workItem from="1762189556306" duration="1000" />
     </task>
     <servers />
   </component>
